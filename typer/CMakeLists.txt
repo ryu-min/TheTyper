@@ -21,6 +21,9 @@ file (GLOB_RECURSE SOURCES
             "${SOURCE_DIR}/*.h"
             "${SOURCE_DIR}/*.hpp"
             "${SOURCE_DIR}/*.cpp"
+            "${SOURCE_DIR}/gui/*.h"
+            "${SOURCE_DIR}/gui/*.hpp"
+            "${SOURCE_DIR}/gui/*.cpp"
             "${RESOURCE_DIR}/*.qrc")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
