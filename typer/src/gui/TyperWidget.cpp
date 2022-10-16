@@ -11,6 +11,7 @@
 
 typer::gui::TyperWidget::TyperWidget(QWidget *parent)
     : QWidget( parent )
+    , m_previousTypedText()
 {
     buildForm();
 }
@@ -26,44 +27,89 @@ void typer::gui::TyperWidget::buildForm()
     QVBoxLayout * labelLayout = new QVBoxLayout();
     labelLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
 
-    QTextEdit * textEdit = new QTextEdit();
+    TyperTextEdit * textEdit = new TyperTextEdit();
     textEdit->setMaximumWidth(300);
     textEdit->setMaximumHeight(60);
 
     textEdit->setOverwriteMode(true);
 
+    const QString backgroundText = "some new text here should"
+                                   "be available to do something";
+
+
     textEdit->setTextColor(Qt::gray);
-    textEdit->append("text text text text");
+    textEdit->insertPlainText(backgroundText);
     textEdit->setTextColor(Qt::black);
 
-    connect( textEdit, &QTextEdit::textChanged, [textEdit](){
+    textEdit->setFocus();
+
+    connect( textEdit, &QTextEdit::textChanged, [textEdit, backgroundText, this](){
+
+//        static QString m_previousTypedText = "";
 
         static bool inChanging = false;
-        if ( inChanging )
+        if ( inChanging ) return;
+        inChanging = true;
+
+        textEdit->moveCursor( QTextCursor::End);
+
+        QString allText = textEdit->toPlainText();
+//        int charWritten = backgroundText.size() - allText.size();
+//        if ( charWritten <= 0 )
+//        {
+//            qDebug() << "all text typed";
+//        }
+
+
+        QChar currentChar = allText.isEmpty() ? QChar(' ') : allText.back();
+        if ( currentChar == '\n')
+        {
+            qDebug() << currentChar << "is back";
+        }
+
+        qDebug() << currentChar;
+
+
+        /// fix first type bag
+        if ( currentChar == ' ' && m_previousTypedText.isEmpty() )
         {
             return;
         }
 
-        inChanging = true;
+        m_previousTypedText.append(currentChar);
 
-//        static int counter = 0;
+        QString currentWord;
+        QStringList splitedPreviousText = m_previousTypedText.split(' ');
+        if ( splitedPreviousText.size() != 0 )
+        {
+            currentWord = splitedPreviousText.last();
+        }
+        qDebug() << "current word is" << currentWord;
 
-        QString placeHolder = "text text text text";
-        QString allText = textEdit->toPlainText();
-        QString realText = allText.right(allText.size() - placeHolder.size());
 
-        qDebug() << "clear";
         textEdit->clear();
-
-
-
         textEdit->setTextColor(Qt::black);
-        textEdit->append(realText);
-        qDebug() << "appen" << realText;
+
+        /// !todo loop thltow splited to correct showing and check
+        /// was it correct typed word or not
+
+
+        textEdit->insertPlainText( m_previousTypedText );
+
+        qDebug() << "previous" << m_previousTypedText;
 
         textEdit->setTextColor(Qt::gray);
-        textEdit->append(placeHolder);
-        qDebug() << "appen" << placeHolder;
+        const int newBackgrountTextSize = backgroundText.size() - m_previousTypedText.size();
+        textEdit->insertPlainText( backgroundText.right( newBackgrountTextSize ) );
+
+
+
+//        textEdit->append(allText);
+//        qDebug() << "appen" << allText;
+
+//        textEdit->append(backgroundText);
+//        qDebug() << "appen" << backgroundText;
+
 
 
         inChanging = false;
