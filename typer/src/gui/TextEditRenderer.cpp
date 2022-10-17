@@ -34,6 +34,38 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     Q_ASSERT(m_textEdit);
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
 
+    int line = 0;
+    const int textEditWidth = textEdit->width();
+    QFontMetrics fontMetrics = textEdit->fontMetrics();
+    for ( const QString & word : m_wordsToType )
+    {
+        QString currentLine = m_lines[line];
+        QString newLine = currentLine.isEmpty() ? ( word ) : (currentLine + ' ' + word);
+//        QString newLine;
+//        if ( currentLine.isEmpty() )
+//        {
+//            newLine = word + ' ';
+//        }
+//        else
+//        {
+//            newLine = currentLine
+//        }
+
+        const int lineWidth = fontMetrics.horizontalAdvance(newLine);
+        if ( lineWidth <= textEditWidth )
+        {
+            m_lines[line] = newLine;
+        }
+        else
+        {
+            m_lines[++line] = word;
+        }
+    }
+
+    for ( int key : m_lines.keys() )
+    {
+        qDebug() << key << m_lines.value(key);
+    }
 }
 
 void typer::gui::TextEditRenderer::textChanged()

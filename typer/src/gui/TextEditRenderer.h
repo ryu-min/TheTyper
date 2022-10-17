@@ -53,6 +53,7 @@ namespace typer
             QStringList m_wordsToType;
             QMap<int, WordPrintMode> m_textToTypeInfo;
             int m_wordTyped;
+            QMap<int, QString> m_lines;
         };
     }
 }
