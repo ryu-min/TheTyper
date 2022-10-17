@@ -43,8 +43,11 @@ namespace typer
 
         protected:
             void hideEvent(QHideEvent *event) override {
-                m_previousTypedText.clear();
-                m_wordTyped = 0;
+
+                // @todo add reseting renderer state
+
+                //m_previousTypedText.clear();
+                //m_wordTyped = 0;
                 QWidget::hideEvent(event);
             }
 
@@ -52,17 +55,6 @@ namespace typer
             void buildForm();
 
         private:
-
-            enum class WordPrintMode {
-                CorrectTypedWord,
-                IncorrectTypedWord,
-                NotTypedWord
-            };
-
-            QString m_previousTypedText;
-            QStringList m_textToType;
-            QMap<int, WordPrintMode> m_textToTypeInfo;
-            int m_wordTyped;
             TextEditRenderer * m_textRenderer;
         };
     }

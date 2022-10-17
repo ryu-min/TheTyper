@@ -22,6 +22,15 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     , m_textToTypeInfo()
     , m_wordTyped()
 {
+
+    // @todo separate line
+
+//     int maxSymbolWidth = textEdit->fontMetrics().maxWidth();
+//    qDebug() << textEdit->width();
+//    qDebug() << maxSymbolWidth;
+//    qDebug() << "symbols in line edit can be" << textEdit->width() / maxSymbolWidth;
+//    qDebug() << "horizonal adv is" << textEdit->fontMetrics().horizontalAdvance("some text some text some text some text");
+
     Q_ASSERT(m_textEdit);
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
 }
@@ -85,8 +94,6 @@ void typer::gui::TextEditRenderer::textChanged()
 
             if ( !splitedPreviousText.last().isEmpty())
             {
-//                    qDebug() << "return from backspace";
-//                    return;
                 m_typedText.remove( m_typedText.size() - 1, 1);
             }
 
