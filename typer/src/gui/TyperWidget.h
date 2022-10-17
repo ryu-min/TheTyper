@@ -1,5 +1,7 @@
 #pragma once
 
+#include "TextEditRenderer.h"
+
 #include <QWidget>
 #include <QTextEdit>
 #include <QDebug>
@@ -61,6 +63,7 @@ namespace typer
             QStringList m_textToType;
             QMap<int, WordPrintMode> m_textToTypeInfo;
             int m_wordTyped;
+            TextEditRenderer * m_textRenderer;
         };
     }
 }
