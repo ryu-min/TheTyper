@@ -41,9 +41,11 @@ namespace typer
             QColor m_incorrectWordColor;
             QColor m_notTypedWord;
 
+            bool inChanging;
+
         private:
 
-            enum class WordPrintMode {
+            enum class WordTypeMode {
                 CorrectTypedWord,
                 IncorrectTypedWord,
                 NotTypedWord
@@ -51,9 +53,17 @@ namespace typer
 
             QString m_typedText;
             QStringList m_wordsToType;
-            QMap<int, WordPrintMode> m_textToTypeInfo;
+            QMap<int, WordTypeMode> m_textToTypeInfo;
             int m_wordTyped;
-            QMap<int, QString> m_lines;
+
+            using LineNumber = int;
+            using WordNumber = int;
+            using LineText   = QString;
+            using WordIndex  = QPair<LineNumber, WordNumber>;
+
+            QMap<WordIndex, WordTypeMode> m_typedWordInfo;
+            QMap<LineNumber, LineText> m_lines;
+            LineNumber m_currentLine;
         };
     }
 }

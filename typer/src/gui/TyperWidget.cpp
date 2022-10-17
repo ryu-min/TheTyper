@@ -46,13 +46,13 @@ void typer::gui::TyperWidget::buildForm()
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
 
-    QStringList textToType = QString("some text some text some text some text "
-                                     "some text some text some text some text ")
+    QStringList textToType = QString("sometext sometextsome textsometext textsometextrwzr "
+                                     "some text some text")
             .split(" ");
 
 
     textEdit->setTextColor(Qt::gray);
-    textEdit->insertPlainText(textToType.join(' '));
+//    textEdit->insertPlainText(textToType.join(' '));
     textEdit->setTextColor(Qt::black);
     textEdit->setAutoFillBackground(false);
     textEdit->setStyleSheet("border:0;");

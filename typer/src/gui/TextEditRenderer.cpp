@@ -17,10 +17,12 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     , m_correctWordColor(Qt::green)
     , m_incorrectWordColor(Qt::red)
     , m_notTypedWord(Qt::gray)
+    , inChanging(false)
     , m_typedText()
     , m_wordsToType(wordsToType)
     , m_textToTypeInfo()
     , m_wordTyped()
+    , m_currentLine(0)
 {
 
     // @todo separate line
@@ -41,18 +43,8 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     {
         QString currentLine = m_lines[line];
         QString newLine = currentLine.isEmpty() ? ( word ) : (currentLine + ' ' + word);
-//        QString newLine;
-//        if ( currentLine.isEmpty() )
-//        {
-//            newLine = word + ' ';
-//        }
-//        else
-//        {
-//            newLine = currentLine
-//        }
-
         const int lineWidth = fontMetrics.horizontalAdvance(newLine);
-        if ( lineWidth <= textEditWidth )
+        if ( lineWidth < textEditWidth )
         {
             m_lines[line] = newLine;
         }
@@ -62,16 +54,21 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
         }
     }
 
+    inChanging = true;
+    m_textEdit->setTextColor(m_notTypedWord);
     for ( int key : m_lines.keys() )
     {
+        m_textEdit->insertPlainText(m_lines.value(key) + ' ');
         qDebug() << key << m_lines.value(key);
     }
+    inChanging = false;
 }
 
 void typer::gui::TextEditRenderer::textChanged()
 {
+    //@todo handle tab input (skip)
 
-    static bool inChanging = false;
+
     if ( inChanging ) return;
     inChanging = true;
 
@@ -94,14 +91,14 @@ void typer::gui::TextEditRenderer::textChanged()
             {
                 QString currentWord = splitedPreviousText.last();
                 Q_ASSERT(m_wordsToType.size() > m_wordTyped);
-                WordPrintMode currentWordMode;
+                WordTypeMode currentWordMode;
                 if ( m_wordsToType[m_wordTyped] == currentWord )
                 {
-                    currentWordMode = WordPrintMode::CorrectTypedWord;
+                    currentWordMode = WordTypeMode::CorrectTypedWord;
                 }
                 else
                 {
-                    currentWordMode = WordPrintMode::IncorrectTypedWord;
+                    currentWordMode = WordTypeMode::IncorrectTypedWord;
                 }
                 m_textToTypeInfo[m_wordTyped] = currentWordMode;
                 int lastSpaceIndex = m_typedText.lastIndexOf(' ');
@@ -148,8 +145,8 @@ void typer::gui::TextEditRenderer::textChanged()
     int writtenSize = 0;
     for ( int i = 0; i < m_wordTyped; ++i)
     {
-        WordPrintMode wordMode = m_textToTypeInfo[i];
-        if ( wordMode == WordPrintMode::CorrectTypedWord)
+        WordTypeMode wordMode = m_textToTypeInfo[i];
+        if ( wordMode == WordTypeMode::CorrectTypedWord)
         {
             m_textEdit->setTextColor(m_correctWordColor);
         }
