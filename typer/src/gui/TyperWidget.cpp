@@ -43,6 +43,10 @@ void typer::gui::TyperWidget::buildForm()
     textEdit->setTextColor(Qt::black);
 
     m_textRenderer = new TextEditRenderer(textToType, textEdit, this);
+    m_textRenderer->setIncorrectWordColor(Qt::darkMagenta);
+    m_textRenderer->setCorrectWordColor(Qt::darkCyan);
+//    m_textRenderer->setNotTypedWordColor(Qt::lightGray);
+
 
     labelLayout->addWidget( textEdit );
 

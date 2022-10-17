@@ -33,6 +33,7 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
 
     Q_ASSERT(m_textEdit);
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
+
 }
 
 void typer::gui::TextEditRenderer::textChanged()
@@ -118,11 +119,11 @@ void typer::gui::TextEditRenderer::textChanged()
         WordPrintMode wordMode = m_textToTypeInfo[i];
         if ( wordMode == WordPrintMode::CorrectTypedWord)
         {
-            m_textEdit->setTextColor(Qt::green);
+            m_textEdit->setTextColor(m_correctWordColor);
         }
         else
         {
-            m_textEdit->setTextColor(Qt::red);
+            m_textEdit->setTextColor(m_incorrectWordColor);
         }
         QString word = m_wordsToType[i];
         m_textEdit->insertPlainText(word + " ");
@@ -137,18 +138,18 @@ void typer::gui::TextEditRenderer::textChanged()
 
         if ( fullWord.startsWith(notPrintedWord) )
         {
-            m_textEdit->setTextColor(Qt::green);
+            m_textEdit->setTextColor(m_correctWordColor);
         }
         else
         {
-            m_textEdit->setTextColor(Qt::red);
+            m_textEdit->setTextColor(m_incorrectWordColor);
         }
         m_textEdit->insertPlainText(notPrintedWord);
         writtenSize  += notPrintedWord.size();
     }
 
     QString textToAdd = joinedText.right( joinedText.size() - writtenSize );
-    m_textEdit->setTextColor(Qt::gray);
+    m_textEdit->setTextColor(m_notTypedWord);
     m_textEdit->insertPlainText(textToAdd);
 
     inChanging = false;
