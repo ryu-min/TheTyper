@@ -35,8 +35,8 @@ void typer::gui::TyperWidget::buildForm()
 
     textEdit->setOverwriteMode(true);
 
-    m_textToType = QString("some new text here should "
-                           "be available to do something").split(" ");
+    m_textToType = QString("some text some text some text some text "
+                           "some text some text some text some text").split(" ");
 
 
     textEdit->setTextColor(Qt::gray);
@@ -57,7 +57,7 @@ void typer::gui::TyperWidget::buildForm()
         textEdit->moveCursor( QTextCursor::End);
 
         const QString allText = textEdit->toPlainText();
-
+        QString joinedText = m_textToType.join(' ');
 //        int charWritten = backgroundText.size() - allText.size();
 //        if ( charWritten <= 0 )
 //        {
@@ -107,9 +107,15 @@ void typer::gui::TyperWidget::buildForm()
         }
         else
         {
-            if ( allText.size() < previosAllText.size() || allText == previosAllText )
+
+            qDebug() << "size should be" << joinedText.size();
+            qDebug() << "size in edit" << allText.size();
+            //qDebug() << previosAllText.size();
+//            if ( allText.size() < previosAllText.size() || allText == previosAllText )
+            if ( allText.size() < joinedText.size() )
             {
                 qDebug() << "backspace";
+
                 if ( !splitedPreviousText.last().isEmpty())
                 {
 //                    qDebug() << "return from backspace";
@@ -123,6 +129,13 @@ void typer::gui::TyperWidget::buildForm()
                 m_previousTypedText.append(currentChar);
             }
         }
+        if ( m_textToType.size() == m_wordTyped )
+        {
+            qDebug() << "all";
+            emit exit();
+        }
+
+
         textEdit->clear();
         textEdit->setTextColor(Qt::black);
         int writtenSize = 0;
@@ -160,7 +173,6 @@ void typer::gui::TyperWidget::buildForm()
             writtenSize  += notPrintedWord.size();
         }
 
-        QString joinedText = m_textToType.join(' ');
         QString textToAdd = joinedText.right( joinedText.size() - writtenSize );
         textEdit->setTextColor(Qt::gray);
         textEdit->insertPlainText(textToAdd);
