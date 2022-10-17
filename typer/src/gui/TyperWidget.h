@@ -18,6 +18,11 @@ namespace typer
                 setReadOnly(true);
             }
 
+            void showEvent(QShowEvent * event) override {
+                setFocus();
+                QTextEdit::showEvent(event);
+            }
+
             void keyPressEvent(QKeyEvent *event) override {
                 setReadOnly(false);
                 QTextEdit::keyPressEvent(event);
@@ -37,6 +42,7 @@ namespace typer
         protected:
             void hideEvent(QHideEvent *event) override {
                 m_previousTypedText.clear();
+                m_wordTyped = 0;
                 QWidget::hideEvent(event);
             }
 
@@ -53,7 +59,7 @@ namespace typer
 
             QString m_previousTypedText;
             QStringList m_textToType;
-            QMap<QString, WordPrintMode> m_textToTypeInfo;
+            QMap<int, WordPrintMode> m_textToTypeInfo;
             int m_wordTyped;
         };
     }
