@@ -18,6 +18,7 @@ namespace typer
             TyperTextEdit( QWidget * parent = nullptr )
                 : QTextEdit( parent ) {
                 setReadOnly(true);
+                setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
             }
 
             void showEvent(QShowEvent * event) override {

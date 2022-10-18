@@ -64,6 +64,7 @@ namespace typer
             QMap<WordIndex, WordTypeMode> m_typedWordInfo;
             QMap<LineNumber, LineText> m_lines;
             LineNumber m_currentLine;
+            WordNumber m_typedWordInLine;
         };
     }
 }

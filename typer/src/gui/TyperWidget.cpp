@@ -46,9 +46,15 @@ void typer::gui::TyperWidget::buildForm()
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
 
-    QStringList textToType = QString("sometext sometextsome textsometext textsometextrwzr "
-                                     "some text some text")
-            .split(" ");
+    QStringList textToType = QString("Words are the basic building blocks of grammar. "
+                                     "Words are combinations of letters and sounds, individual words are separated by spaces. "
+                                     "Some words contain more than one part, such as hyphenated words and other compound words. "
+                                     "Some words are pronounced in the same way but carry different meanings. "
+//                                     "line5 line5 line5 line5 line5 line5 line5 line5 "
+//                                     "line6 line6 line6 line6 line6 line6 line6 line6 "
+//                                     "line7 line7 line7 line7 line7 line7 line7 line7 "
+//                                     "line8 line8 line8 line8 line8 line8 line8 line8 ")
+            ).split(" ");
 
 
     textEdit->setTextColor(Qt::gray);
