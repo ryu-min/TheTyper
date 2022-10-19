@@ -35,13 +35,19 @@ namespace typer
             void textChanged();
 
         protected:
+            void startRendering();
+            void stopRendering();
+            bool isRendering();
+            void splitLines( const QStringList & words);
+            void setInitText();
+
+        protected:
             QTextEdit * m_textEdit;
             // @todo trouble with naming here
             QColor m_correctWordColor;
             QColor m_incorrectWordColor;
             QColor m_notTypedWord;
 
-            bool inChanging;
 
         private:
 
@@ -51,22 +57,17 @@ namespace typer
                 NotTypedWord
             };
 
-            QString m_typedText;
-            QStringList m_wordsToType;
-            QMap<int, WordTypeMode> m_textToTypeInfo;
-            int m_wordTyped;
-
             using LineNumber = int;
             using WordNumber = int;
             using LineText   = QString;
             using WordIndex  = QPair<LineNumber, WordNumber>;
 
+            bool m_isRendering;
             QMap<WordIndex, WordTypeMode> m_typedWordInfo;
             QMap<LineNumber, LineText> m_lines;
             LineNumber m_currentLine;
             WordNumber m_typedWordInLine;
+            LineText m_typedText;
         };
     }
 }
-
-

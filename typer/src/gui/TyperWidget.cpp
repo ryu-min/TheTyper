@@ -19,7 +19,6 @@ typer::gui::TyperWidget::TyperWidget(QWidget *parent)
 
 void typer::gui::TyperWidget::buildForm()
 {
-
     QPushButton * exitButton = new QPushButton(this);
     exitButton->setGeometry(20, 20, 40, 40);
     connect(exitButton, &QPushButton::clicked,
@@ -35,7 +34,6 @@ void typer::gui::TyperWidget::buildForm()
     auto font = textEdit->font();
     font.setPointSize(18);
     textEdit->setFont(font);
-    qDebug() << font.pointSize() << font.pixelSize();
 
     auto p = palette();
     p.setColor( backgroundRole(), Qt::yellow);
@@ -49,16 +47,10 @@ void typer::gui::TyperWidget::buildForm()
     QStringList textToType = QString("Words are the basic building blocks of grammar. "
                                      "Words are combinations of letters and sounds, individual words are separated by spaces. "
                                      "Some words contain more than one part, such as hyphenated words and other compound words. "
-                                     "Some words are pronounced in the same way but carry different meanings. "
-//                                     "line5 line5 line5 line5 line5 line5 line5 line5 "
-//                                     "line6 line6 line6 line6 line6 line6 line6 line6 "
-//                                     "line7 line7 line7 line7 line7 line7 line7 line7 "
-//                                     "line8 line8 line8 line8 line8 line8 line8 line8 ")
-            ).split(" ");
-
+                                     "Some words are pronounced in the same way but carry different meanings. ")
+            .split(" ");
 
     textEdit->setTextColor(Qt::gray);
-//    textEdit->insertPlainText(textToType.join(' '));
     textEdit->setTextColor(Qt::black);
     textEdit->setAutoFillBackground(false);
     textEdit->setStyleSheet("border:0;");
@@ -66,7 +58,6 @@ void typer::gui::TyperWidget::buildForm()
     m_textRenderer = new TextEditRenderer(textToType, textEdit, this);
     m_textRenderer->setIncorrectWordColor(Qt::darkMagenta);
     m_textRenderer->setCorrectWordColor(Qt::darkCyan);
-//    m_textRenderer->setNotTypedWordColor(Qt::lightGray);
 
 
     labelLayout->addWidget( textEdit );

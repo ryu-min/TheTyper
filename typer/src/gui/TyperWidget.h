@@ -42,16 +42,6 @@ namespace typer
         signals:
             void exit();
 
-        protected:
-            void hideEvent(QHideEvent *event) override {
-
-                // @todo add reseting renderer state
-
-                //m_previousTypedText.clear();
-                //m_wordTyped = 0;
-                QWidget::hideEvent(event);
-            }
-
         private:
             void buildForm();
 
