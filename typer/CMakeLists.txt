@@ -14,7 +14,7 @@ set (RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
 
 project("${PROJECT_NAME}" LANGUAGES CXX)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Network REQUIRED)
 
 file (GLOB_RECURSE SOURCES
             "${SOURCE_DIR}/*.h"
@@ -26,4 +26,4 @@ file (GLOB_RECURSE SOURCES
             "${RESOURCE_DIR}/*.qrc")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets )
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets Qt5::Network)

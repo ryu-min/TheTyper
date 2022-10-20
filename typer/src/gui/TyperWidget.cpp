@@ -1,6 +1,6 @@
 #include "TyperWidget.h"
 
-
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -9,7 +9,13 @@
 #include <QTextEdit>
 
 #include <QDebug>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 
 typer::gui::TyperWidget::TyperWidget(QWidget *parent)
     : QWidget( parent )
@@ -44,11 +50,25 @@ void typer::gui::TyperWidget::buildForm()
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
 
-    QStringList textToType = QString("Words are the basic building blocks of grammar. "
-                                     "Words are combinations of letters and sounds, individual words are separated by spaces. "
-                                     "Some words contain more than one part, such as hyphenated words and other compound words. "
-                                     "Some words are pronounced in the same way but carry different meanings. ")
-            .split(" ");
+    QString textToType;
+    QNetworkRequest textRequest( QUrl("http://127.0.0.1:8000/words") );
+    bool requestFinished = false;
+    QNetworkAccessManager * manager = new QNetworkAccessManager;
+    connect(manager, &QNetworkAccessManager::finished, [&textToType, &requestFinished](QNetworkReply * reply) {
+        if ( reply->error() == QNetworkReply::NoError )
+        {
+            QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
+            textToType = d.object().value("words").toString();
+        }
+        else
+        {
+            qDebug() << "!!! request error";
+            textToType = "error error error";
+        }
+        requestFinished = true;
+    });
+    manager->get(textRequest);
+    while ( !requestFinished ) qApp->processEvents();
 
     textEdit->setTextColor(Qt::gray);
     textEdit->setTextColor(Qt::black);
