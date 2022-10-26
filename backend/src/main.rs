@@ -43,6 +43,7 @@ fn main() {
 
     let mut client = database::init_connection("127.0.0.1", "test_db", "test_user", "12345678").unwrap();
     let before = Instant::now();
+//    let _first_words = database::get_words(&mut client).unwrap();
     let _first_words = database::get_n_words(&mut client, 1000).unwrap();
     println!("Request elapsed time: {:.2?}", before.elapsed());
     // if let Err(err) = rocket::build()

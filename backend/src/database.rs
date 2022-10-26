@@ -31,12 +31,57 @@ pub fn get_words(client : &mut Client ) -> Result<Vec<String>, Error> {
 
 pub fn get_n_words(client: &mut Client, count : usize) -> Result<Vec<String>, Error> {
     let mut result = Vec::with_capacity(count);
+
     let query_string = format!("SELECT * FROM words ORDER BY random() LIMIT {}", count);
     for row in client.query(&query_string, &[])? {
         let word: &str = row.get(0);
         result.push(word.to_string());
     }
     Ok(result)
+
+//    WITH RECURSIVE r AS (
+//            WITH b AS (
+//                    SELECT
+//            min(t.{pk}),
+//            (
+//                    SELECT t.{pk}
+//            FROM {table} AS t
+//            WHERE {exclude} t.is_active
+//            ORDER BY t.{pk} DESC
+//            LIMIT 1
+//            OFFSET {limit} - 1
+//            ) max
+//    FROM {table} AS t WHERE {exclude} t.is_active
+//    )
+//    (
+//            SELECT
+//    t.{pk}, min, max, array[]::integer[] || t.{pk} AS a, 0 AS n
+//    FROM {table} AS t, b
+//    WHERE
+//    t.{pk} >= min + ((max - min) * random())::int AND
+//    {exclude}
+//    t.is_active
+//    LIMIT 1
+//    ) UNION ALL (
+//            SELECT t.{pk}, min, max, a || t.{pk}, r.n + 1 AS n
+//    FROM {table} AS t, r
+//    WHERE
+//    t.{pk} >= min + ((max - min) * random())::int AND
+//    t.{pk} <> all(a) AND
+//    r.n + 1 < {limit} AND
+//    {exclude}
+//    t.is_active
+//    LIMIT 1
+//    )
+//    )
+//    SELECT {fields} FROM {table} AS t, r WHERE r.{pk} = t.{pk}
+//
+//    {table} — название таблицы;
+//    {pk} — имя PrimaryKey-поля;
+//    {fields} — список полей для выборки (можно указать и "*");
+//    {exclude} — условие (набор условий) для исключения записей из выборки. Например «t.id NOT IN (1,2,3,4)»;
+//    {limit} — количество записей в финальной выборке
+
 }
 
 pub fn is_empty(client: &mut Client) -> Result<bool, Error> {
