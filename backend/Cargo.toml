@@ -12,3 +12,7 @@ features = ["json"]
 [dependencies.serde]
 version = "1.0.136"
 features = ["derive"]
+
+[dependencies.postgres]
+version = "0.19.4"
+
