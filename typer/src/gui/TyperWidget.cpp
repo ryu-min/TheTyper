@@ -57,8 +57,11 @@ void typer::gui::TyperWidget::buildForm()
     connect(manager, &QNetworkAccessManager::finished, [&textToType, &requestFinished](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError )
         {
+            QString text = QString(reply->readAll());
             QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
             textToType = d.object().value("words").toString();
+            qDebug() << "text to type is" << text;
+            textToType = text;
         }
         else
         {
