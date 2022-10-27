@@ -35,20 +35,11 @@ use std::time::Instant;
 //}
 
 fn main() {
-    println!("test");
-
-    let bytes = include_bytes!("../words/russian.txt");
-    let string_data = String::from_utf8_lossy(bytes);
-    let mut words: Vec<&str> = string_data.split('\n').collect();
+//    let bytes = include_bytes!("../words/russian.txt");
+//    let string_data = String::from_utf8_lossy(bytes);
+//    let mut words: Vec<&str> = string_data.split('\n').collect();
 
     let mut client = database::init_connection("127.0.0.1", "test_db", "test_user", "12345678").unwrap();
-
-//    let mut words = Vec::new();
-//    words.push("other1");
-//    words.push("other2");
-//    words.push("other3");
-//    words.push("othet4");
-//    words.push("other5");
     let before = Instant::now();
     let first_words = database::get_n_words(&mut client, 1000).unwrap();
     let elapsed = before.elapsed();

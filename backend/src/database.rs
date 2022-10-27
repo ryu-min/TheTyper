@@ -13,7 +13,6 @@ pub fn init_connection(host : &str, db_name: &str,
 
 pub fn append_words(client : &mut Client, words: &mut Vec<&str> ) -> Result<(), Error> {
     thread_rng().shuffle(words);
-
     let mut transaction = client.transaction()?;
     for &mut word in words {
         transaction.query(
@@ -39,7 +38,6 @@ pub fn get_n_words(client: &mut Client, count : usize) -> Result<Vec<String>, Er
     let mut result = Vec::with_capacity(count);
     let word_count = get_word_count(client)?;
     let query_string = format!("SELECT word FROM words OFFSET floor(random() * {}) LIMIT {}", word_count, count);
-    println!("{}", query_string);
     for row in client.query(&query_string, &[])? {
         let word: &str = row.get(0);
         result.push(word.to_string());
@@ -76,10 +74,8 @@ fn check_word_table(client : &mut Client) -> Result<(), Error> {
     if !contais_words_table {
         client.batch_execute("
         CREATE TABLE words (
-        id      serial primary key,
-        word    text not null
+        word    TEXT PRIMARY KEY
         )")?;
-        //client.batch_execute("CREATE EXTENSION tsm_system_rows")?;
     }
     Ok(())
 }
