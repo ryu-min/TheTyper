@@ -1,17 +1,31 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 #[macro_use] extern crate rocket;
 mod database;
+use rocket::State;
+use postgres::Client;
+use std::sync::Mutex;
+
+struct DBMutex {
+    mutex : Mutex<Client>
+}
 
 #[get("/")]
-fn world() -> String {
-    let mut client = database::init_connection("127.0.0.1", "test_db", "test_user", "12345678").unwrap();
-    let words = database::get_n_words(&mut client, 10).unwrap();
+fn world(client_mutex : State<DBMutex>) -> String {
+    let mut client = client_mutex.inner().mutex.lock().unwrap();
+    let words = database::get_n_words(&mut client, 100).unwrap();
     let result : String = words.join(" ");
     result
 }
 
 fn main() {
-    rocket::ignite().mount("/words", routes![world]).launch();
+    let db_mutex = DBMutex {
+        mutex: Mutex::new(database::init_connection("127.0.0.1", "test_db", "test_user", "12345678").unwrap())
+    };
+
+    rocket::ignite()
+    .mount("/words", routes![world])
+    .manage(db_mutex)
+    .launch();
 }
 
 //
