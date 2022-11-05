@@ -4,6 +4,7 @@ mod database;
 use rocket::State;
 use postgres::Client;
 use std::sync::Mutex;
+use std::time::Instant;
 
 struct DBMutex {
     mutex : Mutex<Client>
@@ -12,7 +13,9 @@ struct DBMutex {
 #[get("/")]
 fn world(client_mutex : State<DBMutex>) -> String {
     let mut client = client_mutex.inner().mutex.lock().unwrap();
-    let words = database::get_n_words(&mut client, 100).unwrap();
+    let before = Instant::now();
+    let words = database::get_n_words(&mut client, 1000).unwrap();
+    println!("request words {:.2?}", before.elapsed());
     let result : String = words.join(" ");
     result
 }
@@ -33,7 +36,7 @@ fn main() {
 //
 //#[macro_use] extern crate rocket;
 //
-//use std::time::Instant;
+//
 //
 //
 //

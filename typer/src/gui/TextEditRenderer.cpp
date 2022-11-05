@@ -50,6 +50,8 @@ void typer::gui::TextEditRenderer::textChanged()
     const QChar currentChar = textFromWidget.isEmpty() ? QChar(' ') : textFromWidget.back();
     const QStringList splitedPreviousText = m_typedText.split(' ');
 
+    qDebug() << currentChar;
+
     // new word typed
     if ( currentChar == ' ' )
     {

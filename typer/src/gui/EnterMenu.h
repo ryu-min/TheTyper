@@ -2,6 +2,7 @@
 
 #include <QWidget>
 
+
 namespace typer
 {
     namespace gui

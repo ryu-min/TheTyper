@@ -9,9 +9,9 @@
 #include <QTextEdit>
 
 #include <QDebug>
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QtNetwork/QNetworkReply>
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -41,10 +41,10 @@ void typer::gui::TyperWidget::buildForm()
     font.setPointSize(18);
     textEdit->setFont(font);
 
-    auto p = palette();
-    p.setColor( backgroundRole(), Qt::yellow);
-    setAutoFillBackground(true);
-    setPalette(p);
+//    auto p = palette();
+//    p.setColor( backgroundRole(), Qt::yellow);
+//    setAutoFillBackground(true);
+//    setPalette(p);
 
     QPalette palette = textEdit->palette();
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
@@ -60,13 +60,14 @@ void typer::gui::TyperWidget::buildForm()
             QString text = QString(reply->readAll());
             QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
             textToType = d.object().value("words").toString();
-            qDebug() << "text to type is" << text;
+//            qDebug() << "text to type is" << text;
             textToType = text;
         }
         else
         {
             qDebug() << "!!! request error";
-            textToType = "error error error";
+            textToType = " error error error error error error error error error error error error error error error error error "
+                         "error error error error error error error error error error error error error error error error error";
         }
         requestFinished = true;
     });
@@ -79,7 +80,7 @@ void typer::gui::TyperWidget::buildForm()
     textEdit->setStyleSheet("border:0;");
 
     m_textRenderer = new TextEditRenderer(textToType, textEdit, this);
-    m_textRenderer->setIncorrectWordColor(Qt::darkMagenta);
+    m_textRenderer->setIncorrectWordColor(Qt::red);
     m_textRenderer->setCorrectWordColor(Qt::darkCyan);
 
 
