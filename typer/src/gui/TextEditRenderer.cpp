@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QScrollBar>
+#include <QApplication>
 
 typer::gui::TextEditRenderer::TextEditRenderer(const QString &textToType,
                                                QTextEdit *textEdit,
@@ -26,9 +27,9 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     , m_typedText()
 {
     Q_ASSERT(m_textEdit);
-    connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
     splitLines(wordsToType);
     setInitText();
+    connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
 }
 
 void typer::gui::TextEditRenderer::textChanged()
@@ -36,7 +37,8 @@ void typer::gui::TextEditRenderer::textChanged()
     //@todo handle tab input (skip)
 
     if ( isRendering() ) return;
-    startRendering();
+    RendererGuard rg(this);
+    Q_UNUSED(rg);
 
     m_textEdit->moveCursor( QTextCursor::End);
 
@@ -50,48 +52,48 @@ void typer::gui::TextEditRenderer::textChanged()
     const QChar currentChar = textFromWidget.isEmpty() ? QChar(' ') : textFromWidget.back();
     const QStringList splitedPreviousText = m_typedText.split(' ');
 
-    qDebug() << currentChar;
+    // actualy do not understand this bag
+    static bool firstTypeBagFixed = false;
+    if ( !firstTypeBagFixed )
+    {
+        firstTypeBagFixed = true;
+        return;
+    }
+
 
     // new word typed
     if ( currentChar == ' ' )
     {
         if ( !m_typedText.isEmpty() )
         {
-            if ( splitedPreviousText.size() != 0 )
+            QString currentWord = splitedPreviousText.last();
+            //Q_ASSERT(m_wordsToType.size() > m_wordTyped);
+            WordTypeMode currentWordMode;
+            const QString correctWord = m_lines[m_currentLine].split(' ')[m_typedWordInLine];
+            if ( correctWord == currentWord )
             {
-                QString currentWord = splitedPreviousText.last();
-                //Q_ASSERT(m_wordsToType.size() > m_wordTyped);
-                WordTypeMode currentWordMode;
-                const QString correctWord = m_lines[m_currentLine].split(' ')[m_typedWordInLine];
-                if ( correctWord == currentWord )
-                {
-                    currentWordMode = WordTypeMode::CorrectTypedWord;
-                }
-                else
-                {
-                    currentWordMode = WordTypeMode::IncorrectTypedWord;
-                }
-                WordIndex index = qMakePair(m_currentLine, m_typedWordInLine);
-                m_typedWordInfo[index] = currentWordMode;
-
-                int lastSpaceIndex = m_typedText.lastIndexOf(' ');
-                if ( lastSpaceIndex == -1 )
-                {
-                    m_typedText.clear();
-                }
-                else
-                {
-                    m_typedText.remove(lastSpaceIndex, m_typedText.size() - lastSpaceIndex);
-                    if ( m_typedText.back() != ' ') m_typedText.append(' ');
-                }
-                m_typedText.append( correctWord + ' ' );
-                m_typedWordInLine++;
+                currentWordMode = WordTypeMode::CorrectTypedWord;
             }
-            // fix first type bag
             else
             {
-                return;
+                currentWordMode = WordTypeMode::IncorrectTypedWord;
             }
+            WordIndex index = qMakePair(m_currentLine, m_typedWordInLine);
+            m_typedWordInfo[index] = currentWordMode;
+
+            int lastSpaceIndex = m_typedText.lastIndexOf(' ');
+            if ( lastSpaceIndex == -1 )
+            {
+                m_typedText.clear();
+            }
+            else
+            {
+                m_typedText.remove(lastSpaceIndex, m_typedText.size() - lastSpaceIndex);
+                if ( m_typedText.back() != ' ') m_typedText.append(' ');
+            }
+            m_typedText.append( correctWord + ' ' );
+            m_typedWordInLine++;
+
         }
     }
     else
@@ -167,8 +169,6 @@ void typer::gui::TextEditRenderer::textChanged()
     {
         m_textEdit->insertPlainText( ' ' + m_lines[m_currentLine + 1 ] );
     }
-
-    stopRendering();
 }
 
 void typer::gui::TextEditRenderer::startRendering()

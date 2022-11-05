@@ -62,6 +62,21 @@ namespace typer
             using LineText   = QString;
             using WordIndex  = QPair<LineNumber, WordNumber>;
 
+            friend class RendereeGuard;
+            struct RendererGuard {
+                RendererGuard(TextEditRenderer * renderer) : m_renderer(renderer) {
+                    if ( m_renderer ) m_renderer->startRendering();
+                }
+                ~RendererGuard() {
+                    if ( m_renderer ) m_renderer->stopRendering();
+                }
+
+            private:
+                TextEditRenderer * m_renderer;
+            };
+
+        private:
+
             bool m_isRendering;
             QMap<WordIndex, WordTypeMode> m_typedWordInfo;
             QMap<LineNumber, LineText> m_lines;

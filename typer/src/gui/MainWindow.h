@@ -2,9 +2,6 @@
 
 #include <QMainWindow>
 
-#include "SettingsWidget.h"
-#include "TyperWidget.h"
-#include "EnterMenu.h"
 
 namespace typer
 {

@@ -1,7 +1,8 @@
 #include "MainWindow.h"
-#include "EnterMenu.h"
 
-#include <QDebug>
+#include "EnterMenu.h"
+#include "SettingsWidget.h"
+#include "TyperWidget.h"
 
 typer::gui::MainWindow::MainWindow(QWidget *parent)
     : QMainWindow( parent )
