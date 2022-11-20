@@ -1,35 +1,33 @@
-#include "RegistrationDialog.h"
+#include "AuthentificationDialog.h"
 #include "InputGroupBox.h"
 
 #include <QPushButton>
 
-typer::gui::RegistrationDialog::RegistrationDialog(QWidget *parent)
+typer::gui::AuthentificationDialog::AuthentificationDialog(QWidget *parent)
     : QWidget( parent )
-    , m_userNameLineEdit( new QLineEdit() )
-    , m_passwordLineEdit( new QLineEdit() )
-    , m_confirmPassowordLineEdit( new QLineEdit() )
+    , m_userNameLineEdit( new QLineEdit )
+    , m_passwordLineEdit( new QLineEdit )
 {
     buildForm();
 }
 
-void typer::gui::RegistrationDialog::buildForm()
+void typer::gui::AuthentificationDialog::buildForm()
 {
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget( InputGroupBox::create(m_userNameLineEdit, "&User name") );
-    mainLayout->addWidget( InputGroupBox::create( m_passwordLineEdit, "", "password", true));
-    mainLayout->addWidget( InputGroupBox::create(m_confirmPassowordLineEdit, "", "confirm password", true));
+    mainLayout->addWidget( InputGroupBox::create( m_passwordLineEdit, "&Password", "", true));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout;
     QPushButton * acceptButton = new QPushButton("Accept");
     QPushButton * cancelButton = new QPushButton("Cancel");
     connect(acceptButton, &QPushButton::pressed, this, [this]() {
-        RegistrationInfo info;
+        AuthentificationInfo info;
         info.userName = m_userNameLineEdit->text();
         info.password = m_passwordLineEdit->text();
-        info.confirmedPassword = m_confirmPassowordLineEdit->text();
         emit accepted( info );
     });
-    connect(cancelButton, &QPushButton::pressed, this, &RegistrationDialog::canceled);
+    connect(cancelButton, &QPushButton::pressed, this, &AuthentificationDialog::canceled);
+
     acceptButton->setFixedWidth(70);
     cancelButton->setFixedWidth(70);
     buttonsLayout->addWidget( acceptButton, 0, Qt::AlignRight);

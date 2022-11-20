@@ -54,7 +54,7 @@ void typer::gui::TyperWidget::buildForm()
     QNetworkRequest textRequest( QUrl("http://127.0.0.1:8000/words") );
     bool requestFinished = false;
     QNetworkAccessManager * manager = new QNetworkAccessManager;
-    connect(manager, &QNetworkAccessManager::finished, [&textToType, &requestFinished](QNetworkReply * reply) {
+    connect(manager, &QNetworkAccessManager::finished, this, [&textToType, &requestFinished](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError )
         {
             QString text = QString(reply->readAll());

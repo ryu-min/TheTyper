@@ -7,22 +7,21 @@ namespace typer
 {
     namespace gui
     {
-        class RegistrationDialog : public QWidget
+        class AuthentificationDialog : public QWidget
         {
             Q_OBJECT
 
         public:
-            struct RegistrationInfo {
+            struct AuthentificationInfo {
                 QString userName;
                 QString password;
-                QString confirmedPassword;
             };
 
         public:
-            RegistrationDialog( QWidget * parent = nullptr);
+            AuthentificationDialog( QWidget * parent = nullptr );
 
         signals:
-            void accepted( const typer::gui::RegistrationDialog::RegistrationInfo & info );
+            void accepted( const typer::gui::AuthentificationDialog::AuthentificationInfo & info );
             void canceled();
 
         private:
@@ -31,9 +30,8 @@ namespace typer
         private:
             QLineEdit * m_userNameLineEdit;
             QLineEdit * m_passwordLineEdit;
-            QLineEdit * m_confirmPassowordLineEdit;
+
         };
     }
 }
-
 

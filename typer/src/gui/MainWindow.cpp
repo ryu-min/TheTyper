@@ -15,14 +15,14 @@ void typer::gui::MainWindow::setEnterMenu()
     EnterMenu * enterMenu = new EnterMenu;
     setCentralWidget(  enterMenu );
 
-    connect( enterMenu, &EnterMenu::start, [this](){
+    connect( enterMenu, &EnterMenu::start, this, [this](){
         TyperWidget * typerWidget = new TyperWidget;
         setCentralWidget( typerWidget );
         connect( typerWidget, &TyperWidget::exit,
                  this, &MainWindow::setEnterMenu);
     });
 
-    connect( enterMenu, &EnterMenu::settings, [this](){
+    connect( enterMenu, &EnterMenu::settings, this, [this](){
         SettingsWidget * settingsWidget = new SettingsWidget;
         setCentralWidget( settingsWidget );
         connect( settingsWidget, &SettingsWidget::exit,
