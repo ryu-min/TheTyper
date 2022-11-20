@@ -18,20 +18,15 @@ set (RESOURCE_DIR "${CMAKE_SOURCE_DIR}/res")
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 
-#todo separate cmakelist
-set(PROJECT_SOURCES
-        "${SOURCE_DIR}/main.cpp"
-        "${SOURCE_DIR}/gui/EnterMenu.cpp"
-        "${SOURCE_DIR}/gui/EnterMenu.h"
-        "${SOURCE_DIR}/gui/MainWindow.cpp"
-        "${SOURCE_DIR}/gui/MainWindow.h"
-        "${SOURCE_DIR}/gui/SettingsWidget.cpp"
-        "${SOURCE_DIR}/gui/SettingsWidget.h"
-        "${SOURCE_DIR}/gui/TextEditRenderer.cpp"
-        "${SOURCE_DIR}/gui/TextEditRenderer.h"
-        "${SOURCE_DIR}/gui/TyperWidget.cpp"
-        "${SOURCE_DIR}/gui/TyperWidget.h"
-)
+
+file (GLOB_RECURSE PROJECT_SOURCES
+            "${SOURCE_DIR}/*.h"
+            "${SOURCE_DIR}/*.cpp"
+            "${SOURCE_DIR}/gui/*.h"
+            "${SOURCE_DIR}/gui/*.cpp"
+            "${SOURCE_DIR}/gui/auth/*.h"
+            "${SOURCE_DIR}/gui/auth/*.cpp"
+            "${RESOURCE_DIR}/*.qrc")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${PROJECT_NAME}
