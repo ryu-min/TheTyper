@@ -28,7 +28,10 @@ func main() {
 		fmt.Println(conf.BinAddr)
 		fmt.Println(conf.DatabaseURL)
 		service := auth_service.New(conf)
-		service.Start()
+		err = service.Start()
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
