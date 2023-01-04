@@ -29,7 +29,7 @@ void typer::gui::RegistrationDialog::buildForm()
     QPushButton * acceptButton = new QPushButton("Accept");
     QPushButton * cancelButton = new QPushButton("Cancel");
     connect(acceptButton, &QPushButton::pressed, this, [this]() {
-        RegistrationInfo info;
+        typer::common::RegistrationInfo info;
         info.userName = m_userNameLineEdit->text();
         info.password = m_passwordLineEdit->text();
         info.confirmedPassword = m_confirmPassowordLineEdit->text();

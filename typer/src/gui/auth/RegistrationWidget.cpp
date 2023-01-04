@@ -1,5 +1,7 @@
 #include "RegistrationWidget.h"
 
+#include "RegistrationDialog.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

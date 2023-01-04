@@ -22,6 +22,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
 file (GLOB_RECURSE PROJECT_SOURCES
             "${SOURCE_DIR}/*.h"
             "${SOURCE_DIR}/*.cpp"
+            "${SOURCE_DIR}/common/*.h"
+            "${SOURCE_DIR}/common/*.cpp"
             "${SOURCE_DIR}/gui/*.h"
             "${SOURCE_DIR}/gui/*.cpp"
             "${SOURCE_DIR}/gui/auth/*.h"

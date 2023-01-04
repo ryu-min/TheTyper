@@ -2,7 +2,7 @@
 
 #include <QWidget>
 
-#include "AuthentificationDialog.h"
+#include "../../common/UserInfo.h"
 
 namespace typer
 {
@@ -15,7 +15,7 @@ namespace typer
             AuthentificationWidget( QWidget * parent = nullptr);
 
         signals:
-            void accepted( const typer::gui::AuthentificationDialog::AuthentificationInfo & info );
+            void accepted( const typer::common::AuthentificationInfo & info );
             void canceled();
 
         private:

@@ -3,6 +3,8 @@
 #include <QWidget>
 #include <QLineEdit>
 
+#include "../../common/UserInfo.h"
+
 namespace typer
 {
     namespace gui
@@ -12,17 +14,10 @@ namespace typer
             Q_OBJECT
 
         public:
-            struct RegistrationInfo {
-                QString userName;
-                QString password;
-                QString confirmedPassword;
-            };
-
-        public:
             RegistrationDialog( QWidget * parent = nullptr);
 
         signals:
-            void accepted( const typer::gui::RegistrationDialog::RegistrationInfo & info );
+            void accepted( const typer::common::RegistrationInfo & info );
             void canceled();
 
         protected:

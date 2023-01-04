@@ -3,6 +3,8 @@
 #include <QWidget>
 #include <QLineEdit>
 
+#include "../../common/UserInfo.h"
+
 namespace typer
 {
     namespace gui
@@ -12,20 +14,10 @@ namespace typer
             Q_OBJECT
 
         public:
-
-            /**
-             * @brief The AuthentificationInfo class - @todo move out of class ?
-             */
-            struct AuthentificationInfo {
-                QString userName;
-                QString password;
-            };
-
-        public:
             AuthentificationDialog( QWidget * parent = nullptr );
 
         signals:
-            void accepted( const typer::gui::AuthentificationDialog::AuthentificationInfo & info );
+            void accepted( const typer::common::AuthentificationInfo & info );
             void canceled();
 
         protected:

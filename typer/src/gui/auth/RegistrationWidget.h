@@ -1,7 +1,8 @@
 #pragma once
 
 #include <QWidget>
-#include "RegistrationDialog.h"
+
+#include "../../common/UserInfo.h"
 
 namespace typer
 {
@@ -15,14 +16,12 @@ namespace typer
             RegistrationWidget( QWidget * parent = nullptr );
 
         signals:
-            void accepted( const typer::gui::RegistrationDialog::RegistrationInfo & info );
+            void accepted( const typer::common::RegistrationInfo & info );
             void canceled();
 
         private:
             void buildForm();
-
         };
-
     }
 }
 

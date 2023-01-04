@@ -1,5 +1,7 @@
 #include "AuthentificationWidget.h"
 
+#include "AuthentificationDialog.h"
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

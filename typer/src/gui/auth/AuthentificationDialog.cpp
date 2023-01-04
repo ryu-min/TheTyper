@@ -3,6 +3,7 @@
 
 #include <QPushButton>
 
+
 typer::gui::AuthentificationDialog::AuthentificationDialog(QWidget *parent)
     : QWidget( parent )
     , m_userNameLineEdit( new QLineEdit )
@@ -31,7 +32,7 @@ void typer::gui::AuthentificationDialog::buildForm()
     QPushButton * acceptButton = new QPushButton("Accept");
     QPushButton * cancelButton = new QPushButton("Cancel");
     connect(acceptButton, &QPushButton::pressed, this, [this]() {
-        AuthentificationInfo info;
+        typer::common::AuthentificationInfo info;
         info.userName = m_userNameLineEdit->text();
         info.password = m_passwordLineEdit->text();
         emit accepted( info );
