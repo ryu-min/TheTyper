@@ -34,6 +34,7 @@ namespace typer
                 if ( passwordMode ) lineEdit->setEchoMode( QLineEdit::Password );
                 lineEdit->setPlaceholderText(tooltip);
                 lineEdit->setAutoFillBackground(false);
+
                 QFont lineEditFont = lineEdit->font();
                 lineEditFont.setPixelSize(12);
                 lineEdit->setFont(lineEditFont);

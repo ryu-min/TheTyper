@@ -4,6 +4,11 @@
 #include "SettingsWidget.h"
 #include "TyperWidget.h"
 
+#include "auth/RegistrationWidget.h"
+#include "auth/AuthentificationWidget.h"
+
+#include <QPushButton>
+
 typer::gui::MainWindow::MainWindow(QWidget *parent)
     : QMainWindow( parent )
 {
@@ -29,8 +34,21 @@ void typer::gui::MainWindow::setEnterMenu()
                  this, &MainWindow::setEnterMenu);
     });
 
-//    connect( enterMenu, &EnterMenu::start, [this](){
-//        TyperWidget * typerWidget = new TyperWidget;
-//        setCentralWidget( typerWidget );
-//    });
+    connect( enterMenu, &EnterMenu::auth, this, [this](){
+        AuthentificationWidget * authWidget = new AuthentificationWidget;
+        setCentralWidget( authWidget );
+        connect( authWidget, &AuthentificationWidget::accepted,
+                 this, &MainWindow::setEnterMenu);
+        connect( authWidget, &AuthentificationWidget::canceled,
+                 this, &MainWindow::setEnterMenu);
+    });
+
+    connect( enterMenu, &EnterMenu::registration, this, [this](){
+        RegistrationWidget * registrationWidget = new RegistrationWidget;
+        setCentralWidget( registrationWidget );
+        connect( registrationWidget, &RegistrationWidget::accepted,
+                 this, &MainWindow::setEnterMenu);
+        connect( registrationWidget, &RegistrationWidget::canceled,
+                 this, &MainWindow::setEnterMenu);
+    });
 }

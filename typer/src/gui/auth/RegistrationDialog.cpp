@@ -12,6 +12,12 @@ typer::gui::RegistrationDialog::RegistrationDialog(QWidget *parent)
     buildForm();
 }
 
+void typer::gui::RegistrationDialog::showEvent(QShowEvent *event)
+{
+    m_userNameLineEdit->setFocus();
+    QWidget::showEvent( event );
+}
+
 void typer::gui::RegistrationDialog::buildForm()
 {
     QVBoxLayout * mainLayout = new QVBoxLayout(this);

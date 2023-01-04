@@ -11,10 +11,20 @@ typer::gui::AuthentificationDialog::AuthentificationDialog(QWidget *parent)
     buildForm();
 }
 
+void typer::gui::AuthentificationDialog::showEvent(QShowEvent *event)
+{
+    m_userNameLineEdit->setFocus();
+    QWidget::showEvent(event);
+}
+
 void typer::gui::AuthentificationDialog::buildForm()
 {
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget( InputGroupBox::create(m_userNameLineEdit, "&User name") );
+
+    auto userNameGroupBox = InputGroupBox::create(m_userNameLineEdit, "&User name");
+    //userNameGroupBox->setFocus();
+
+    mainLayout->addWidget( userNameGroupBox );
     mainLayout->addWidget( InputGroupBox::create( m_passwordLineEdit, "&Password", "", true));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout;

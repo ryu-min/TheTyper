@@ -12,6 +12,10 @@ namespace typer
             Q_OBJECT
 
         public:
+
+            /**
+             * @brief The AuthentificationInfo class - @todo move out of class ?
+             */
             struct AuthentificationInfo {
                 QString userName;
                 QString password;
@@ -24,12 +28,16 @@ namespace typer
             void accepted( const typer::gui::AuthentificationDialog::AuthentificationInfo & info );
             void canceled();
 
+        protected:
+            void showEvent(QShowEvent *event) override;
+
         private:
             void buildForm();
 
         private:
             QLineEdit * m_userNameLineEdit;
             QLineEdit * m_passwordLineEdit;
+
 
         };
     }

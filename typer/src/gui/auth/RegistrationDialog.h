@@ -25,6 +25,9 @@ namespace typer
             void accepted( const typer::gui::RegistrationDialog::RegistrationInfo & info );
             void canceled();
 
+        protected:
+            void showEvent( QShowEvent * event) override;
+
         private:
             void buildForm();
 

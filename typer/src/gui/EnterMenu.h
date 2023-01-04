@@ -16,6 +16,8 @@ namespace typer
         signals:
             void start();
             void settings();
+            void auth();
+            void registration();
 
         private:
             void buildForm();
