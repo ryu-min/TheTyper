@@ -1,6 +1,8 @@
 #include "UserInfoValidation.h"
 
-UserInfoValidation::UserInfoValidation()
-{
 
+bool typer::common::validateRegistrationInfo(const RegistrationInfo &info)
+{
+    Q_UNUSED( info );
+    return true;
 }

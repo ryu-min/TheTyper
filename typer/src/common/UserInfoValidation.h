@@ -1,9 +1,16 @@
 #pragma once
 
+#include "UserInfo.h"
 
-class UserInfoValidation
+namespace typer
 {
-public:
-    UserInfoValidation();
-};
-
+    namespace common
+    {
+        /**
+         * @brief validateRegistrationInfo - @todo add impl
+         * @param info
+         * @return
+         */
+        bool validateRegistrationInfo( const RegistrationInfo & info );
+    }
+}
