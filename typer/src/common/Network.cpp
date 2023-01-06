@@ -38,6 +38,14 @@ typer::common::authUser(const AuthentificationInfo &info)
                      [&token, &requestFinished](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError ) {
             token = reply->readAll();
+            if ( reply->hasRawHeader("jwt") ) {
+                qDebug() << "has header";
+                token = reply->rawHeader("jwt");
+            }
+            else
+            {
+                qDebug() << "has not jwt token";
+            }
         }
         else {
             qDebug() << "recieve error" << reply->error();

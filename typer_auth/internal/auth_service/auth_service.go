@@ -80,9 +80,10 @@ func (s *AuthService) auth() http.HandlerFunc {
 				jwtToken, jwtErr := GenerateJWT(userName)
 				if jwtErr != nil {
 					println(jwtErr)
+                     w.WriteHeader(400)
 					fmt.Fprintf(w, "error")
 				} else {
-					fmt.Fprintf(w, jwtToken)
+                    w.Header().Add("jwt", jwtToken)
 				}
 			}
 		} else {
@@ -96,7 +97,7 @@ func (s *AuthService) auth() http.HandlerFunc {
 func GenerateJWT(userName string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
-	var mySigningKey = []byte("johenews")
+	var mySigningKey = []byte("tss")
 
 	claims := token.Claims.(jwt.MapClaims)
 
