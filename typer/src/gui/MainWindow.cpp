@@ -4,40 +4,39 @@
 #include "SettingsWidget.h"
 #include "TyperWidget.h"
 
+#include "../common/Network.h"
+
 #include "auth/RegistrationWidget.h"
 #include "auth/AuthentificationWidget.h"
 
 #include <QApplication>
 #include <QPushButton>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
-#include <QJsonDocument>
+#include <QMessageBox>
 
 
 typer::gui::MainWindow::MainWindow(QWidget *parent)
     : QMainWindow( parent )
 {
-    setEnterMenu();
+    openEnterMenu();
 }
 
-void typer::gui::MainWindow::setEnterMenu()
+void typer::gui::MainWindow::openEnterMenu()
 {
     EnterMenu * enterMenu = new EnterMenu;
-    setCentralWidget(  enterMenu );
+    setCentralWidget( enterMenu );
 
     connect( enterMenu, &EnterMenu::start, this, [this](){
         TyperWidget * typerWidget = new TyperWidget;
         setCentralWidget( typerWidget );
         connect( typerWidget, &TyperWidget::exit,
-                 this, &MainWindow::setEnterMenu);
+                 this, &MainWindow::openEnterMenu);
     });
 
     connect( enterMenu, &EnterMenu::settings, this, [this](){
         SettingsWidget * settingsWidget = new SettingsWidget;
         setCentralWidget( settingsWidget );
         connect( settingsWidget, &SettingsWidget::exit,
-                 this, &MainWindow::setEnterMenu);
+                 this, &MainWindow::openEnterMenu);
     });
 
     connect( enterMenu, &EnterMenu::auth, this, [this](){
@@ -45,34 +44,19 @@ void typer::gui::MainWindow::setEnterMenu()
         setCentralWidget( authWidget );
         connect( authWidget, &AuthentificationWidget::accepted,
                  this, [this](const typer::common::AuthentificationInfo & info) {
-            // @todo encript pass
-            QString urlString = QString("http://127.0.0.1:8080/auth?user_name='%1'&user_password='%2'")
-                    .arg(info.userName)
-                    .arg(info.password);
+            common::JwtToken token = common::authUser( info );
+            qDebug() << "recieve tokent" << token;
+            if ( token.isEmpty() ) {
+                QMessageBox::warning(this, "Authentification error", "some error");
+            }
+            else {
+                QMessageBox::information(this, "Success", "Success");
+                openEnterMenu();
+            }
 
-            qDebug() << "url string is" << urlString;
-
-            QNetworkRequest textRequest( urlString );
-            bool requestFinished = false;
-            QNetworkAccessManager * manager = new QNetworkAccessManager;
-            connect(manager, &QNetworkAccessManager::finished, this, [&requestFinished](QNetworkReply * reply) {
-                if ( reply->error() == QNetworkReply::NoError )
-                {
-                    QString text = QString(reply->readAll());
-                    QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
-                    qDebug() << "recieve" << text;
-                }
-                else
-                {
-                    qDebug() << "!!! request error";
-                }
-                requestFinished = true;
-            });
-            manager->get(textRequest);
-            while ( !requestFinished ) qApp->processEvents();
         });
         connect( authWidget, &AuthentificationWidget::canceled,
-                 this, &MainWindow::setEnterMenu);
+                 this, &MainWindow::openEnterMenu);
     });
 
     connect( enterMenu, &EnterMenu::registration, this, [this](){
@@ -81,33 +65,17 @@ void typer::gui::MainWindow::setEnterMenu()
         connect( registrationWidget, &RegistrationWidget::accepted,
                  [this](const typer::common::RegistrationInfo & info)
         {
-            // @todo encript pass
-            QString urlString = QString("http://127.0.0.1:8080/register?user_name='%1'&user_password='%2'")
-                    .arg(info.userName)
-                    .arg(info.password);
-
-            qDebug() << "url string is" << urlString;
-
-            QNetworkRequest textRequest( urlString );
-            bool requestFinished = false;
-            QNetworkAccessManager * manager = new QNetworkAccessManager;
-            connect(manager, &QNetworkAccessManager::finished, this, [&requestFinished](QNetworkReply * reply) {
-                if ( reply->error() == QNetworkReply::NoError )
-                {
-                    QString text = QString(reply->readAll());
-                    QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
-                    qDebug() << "recieve" << text;
-                }
-                else
-                {
-                    qDebug() << "!!! request error";
-                }
-                requestFinished = true;
-            });
-            manager->get(textRequest);
-            while ( !requestFinished ) qApp->processEvents();
+            common::JwtToken token = common::registerUser( info );
+            qDebug() << "recieve tokent" << token;
+            if ( token.isEmpty() ) {
+                QMessageBox::warning(this, "Registration error", "some error");
+            }
+            else {
+                QMessageBox::information(this, "Success", "Success");
+                openEnterMenu();
+            }
         });
         connect( registrationWidget, &RegistrationWidget::canceled,
-                 this, &MainWindow::setEnterMenu);
+                 this, &MainWindow::openEnterMenu);
     });
 }

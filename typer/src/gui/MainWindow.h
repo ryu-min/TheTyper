@@ -14,7 +14,7 @@ namespace typer
             MainWindow(QWidget *parent = nullptr);
 
         private slots:
-            void setEnterMenu();
+            void openEnterMenu();
         };
     }
 }
