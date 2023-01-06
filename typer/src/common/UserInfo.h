@@ -22,5 +22,9 @@ namespace typer
             QString password;
             QString confirmedPassword;
         };
+
+        inline QString encriptString( QString toEncript ) {
+            return toEncript;
+        }
     }
 }
