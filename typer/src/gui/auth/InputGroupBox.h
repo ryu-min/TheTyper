@@ -10,6 +10,14 @@ namespace typer
     {
         namespace InputGroupBox
         {
+            /**
+             * @brief create
+             * @param lineEdit
+             * @param title
+             * @param tooltip
+             * @param passwordMode
+             * @return
+             */
             inline QGroupBox * create(QLineEdit * lineEdit,
                                const QString & title = QString(),
                                const QString & tooltip = QString(),
@@ -30,6 +38,21 @@ namespace typer
                 gb->setLayout( gbLayout );
 
                 return gb;
+            }
+
+
+            /**
+             * @brief create
+             * @param lineEdit
+             * @param title
+             * @param passwordMode
+             * @return
+             */
+            inline QGroupBox * create(QLineEdit * lineEdit,
+                               const QString & title,
+                               bool passwordMode)
+            {
+                return create( lineEdit, title, QString(), passwordMode);
             }
         }
     }

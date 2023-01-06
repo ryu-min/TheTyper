@@ -22,8 +22,8 @@ void typer::gui::RegistrationDialog::buildForm()
 {
     QVBoxLayout * mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget( InputGroupBox::create(m_userNameLineEdit, "&User name") );
-    mainLayout->addWidget( InputGroupBox::create( m_passwordLineEdit, "", "password", true));
-    mainLayout->addWidget( InputGroupBox::create(m_confirmPassowordLineEdit, "", "confirm password", true));
+    mainLayout->addWidget( InputGroupBox::create( m_passwordLineEdit, "&Password", true));
+    mainLayout->addWidget( InputGroupBox::create(m_confirmPassowordLineEdit, "&Confirmed password", true));
 
     QHBoxLayout * buttonsLayout = new QHBoxLayout;
     QPushButton * acceptButton = new QPushButton("Accept");
