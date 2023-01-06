@@ -2,6 +2,8 @@
 
 #include <QString>
 
+#include <QCryptographicHash>
+
 namespace typer
 {
     namespace common
@@ -24,7 +26,9 @@ namespace typer
         };
 
         inline QString encriptString( QString toEncript ) {
-            return toEncript;
+            QCryptographicHash hash(QCryptographicHash::Sha256);
+            hash.addData( toEncript.toUtf8() );
+            return hash.result();
         }
     }
 }
