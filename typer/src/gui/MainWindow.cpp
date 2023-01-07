@@ -50,6 +50,7 @@ void typer::gui::MainWindow::openEnterMenu()
                 QMessageBox::warning(this, "Authentification error", "some error");
             }
             else {
+                bool checkToken = common::checkToken(token);
                 QMessageBox::information(this, "Success", "Success");
                 openEnterMenu();
             }

@@ -53,5 +53,11 @@ namespace typer
          */
         JwtToken registerUser( const RegistrationInfo & info );
 
+        /**
+         * @brief checkToken - test function
+         * @param token
+         * @return
+         */
+        bool checkToken(JwtToken token);
     }
 }

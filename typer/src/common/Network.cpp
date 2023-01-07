@@ -101,3 +101,37 @@ typer::common::registerUser(const RegistrationInfo &info)
 
     return token;
 }
+
+bool typer::common::checkToken(JwtToken token)
+{
+    qDebug() << "send check token" << token;
+
+    const QString requestString = QString("%1/check_token").arg(getAuthServiceUrlString());
+
+    QNetworkAccessManager manager;
+    bool requestFinished = false;
+    bool success = false;
+
+    QObject::connect(&manager, &QNetworkAccessManager::finished, &manager,
+                     [&requestFinished, &success](QNetworkReply * reply) {
+        if ( reply->error() == QNetworkReply::NoError ) {
+            qDebug() << "return succus";
+            success = true;
+        }
+        else {
+            qDebug() << "return error";
+        }
+        qDebug() << reply->readAll();
+        reply->deleteLater();
+        requestFinished = true;
+    });
+
+
+    QNetworkRequest request( requestString );
+    request.setRawHeader("jwt_token", token.toUtf8());
+
+    manager.get( request );
+    while ( !requestFinished ) qApp->processEvents();
+
+    return success;
+}

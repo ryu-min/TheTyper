@@ -37,6 +37,7 @@ func (s *AuthService) ConfigureRouter() {
 	// todo GET -> POST
 	s.router.HandleFunc("/register", s.register()).Methods("GET")
 	s.router.HandleFunc("/auth", s.auth()).Methods("GET")
+    s.router.HandleFunc("/check_token", s.checkToken()).Methods("GET")
 }
 
 func (s *AuthService) register() http.HandlerFunc {
@@ -92,6 +93,35 @@ func (s *AuthService) auth() http.HandlerFunc {
 			println(err)
 		}
 	}
+}
+
+func (s *AuthService) checkToken() http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+
+        tokenString := r.Header.Get("jwt_token")
+        fmt.Println("check token" + tokenString)
+
+        claims := jwt.MapClaims{}
+        _, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+            return []byte("tss"), nil
+        })
+        if err == nil {
+            fmt.Println("success parse for user with claims");
+            for key, val := range claims {
+                fmt.Printf("Key: %v, value: %v\n", key, val)
+            }
+        } else {
+            fmt.Println("error parse")
+            fmt.Fprintf(w, "error")
+            fmt.Println(err)
+        }
+        // ... error handling
+
+        // do something with decoded claims
+        for key, val := range claims {
+            fmt.Printf("Key: %v, value: %v\n", key, val)
+        }
+    }
 }
 
 func GenerateJWT(userName string) (string, error) {
