@@ -102,24 +102,19 @@ func (s *AuthService) checkToken() http.HandlerFunc {
         fmt.Println("check token" + tokenString)
 
         claims := jwt.MapClaims{}
+
+
         _, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
             return []byte("tss"), nil
         })
         if err == nil {
-            fmt.Println("success parse for user with claims");
-            for key, val := range claims {
-                fmt.Printf("Key: %v, value: %v\n", key, val)
-            }
+
+            userName, _ := claims["user"].(string)
+            fmt.Println("success parse for user" + userName);
         } else {
             fmt.Println("error parse")
             fmt.Fprintf(w, "error")
             fmt.Println(err)
-        }
-        // ... error handling
-
-        // do something with decoded claims
-        for key, val := range claims {
-            fmt.Printf("Key: %v, value: %v\n", key, val)
         }
     }
 }
