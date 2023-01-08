@@ -126,7 +126,6 @@ bool typer::common::checkToken(JwtToken token)
         requestFinished = true;
     });
 
-
     QNetworkRequest request( requestString );
     request.setRawHeader("jwt_token", token.toUtf8());
 
