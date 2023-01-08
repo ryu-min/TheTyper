@@ -2,7 +2,6 @@
 
 #include <QMainWindow>
 
-
 namespace typer
 {
     namespace gui
