@@ -44,7 +44,8 @@ void typer::gui::MainWindow::openEnterMenu()
         setCentralWidget( authWidget );
         connect( authWidget, &AuthentificationWidget::accepted,
                  this, [this](const typer::common::AuthentificationInfo & info) {
-            common::JwtToken token = common::authUser( info );
+            common::JwtToken token = common::authUser( info )
+                    .unwrapOr(common::JwtToken(""));
             qDebug() << "recieve tokent" << token;
             if ( token.isEmpty() ) {
                 QMessageBox::warning(this, "Authentification error", "some error");

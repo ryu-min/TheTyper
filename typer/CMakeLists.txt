@@ -25,7 +25,6 @@ file (GLOB_RECURSE PROJECT_SOURCES
             "${SOURCE_DIR}/*.h"
             "${SOURCE_DIR}/*.cpp"
             "${SOURCE_DIR}/common/result/*.h"
-            "${SOURCE_DIR}/common/result/*.hpp"
             "${SOURCE_DIR}/common/*.h"
             "${SOURCE_DIR}/common/*.cpp"
             "${SOURCE_DIR}/gui/*.h"

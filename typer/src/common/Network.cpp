@@ -20,7 +20,7 @@ QString getAuthServiceUrlString() {
 
 }
 
-typer::common::JwtToken
+typer::common::AuthResult
 typer::common::authUser(const AuthentificationInfo &info)
 {
     WaitCoursor wc;
@@ -57,7 +57,7 @@ typer::common::authUser(const AuthentificationInfo &info)
     manager.get( QNetworkRequest(requestString) );
     while ( !requestFinished ) qApp->processEvents();
 
-    return token;
+    return Ok(token);
 }
 
 typer::common::JwtToken
@@ -96,7 +96,7 @@ typer::common::registerUser(const RegistrationInfo &info)
         token = authUser( AuthentificationInfo {
                               info.userName,
                               info.password
-                          });
+                          }).unwrapOr(JwtToken(""));
     }
 
     return token;
