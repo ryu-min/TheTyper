@@ -1,2 +1,0 @@
-bind_addr = ":8080"
-database_url = "host=somehost dbname=some_db_name sslmode=disable password=some_password"
