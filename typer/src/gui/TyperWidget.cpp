@@ -41,11 +41,6 @@ void typer::gui::TyperWidget::buildForm()
     font.setPointSize(18);
     textEdit->setFont(font);
 
-//    auto p = palette();
-//    p.setColor( backgroundRole(), Qt::yellow);
-//    setAutoFillBackground(true);
-//    setPalette(p);
-
     QPalette palette = textEdit->palette();
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
@@ -60,7 +55,6 @@ void typer::gui::TyperWidget::buildForm()
             QString text = QString(reply->readAll());
             QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
             textToType = d.object().value("words").toString();
-//            qDebug() << "text to type is" << text;
             textToType = text;
         }
         else

@@ -2,11 +2,12 @@ package auth_service
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gorilla/mux"
 	"net/http"
 	"typer_auth/internal/auth_config"
 	"typer_auth/internal/database"
+
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gorilla/mux"
 )
 
 type AuthService struct {
@@ -37,7 +38,7 @@ func (s *AuthService) ConfigureRouter() {
 	// todo GET -> POST
 	s.router.HandleFunc("/register", s.register()).Methods("GET")
 	s.router.HandleFunc("/auth", s.auth()).Methods("GET")
-    s.router.HandleFunc("/check_token", s.checkToken()).Methods("GET")
+	s.router.HandleFunc("/check_token", s.checkToken()).Methods("GET")
 }
 
 func (s *AuthService) register() http.HandlerFunc {
@@ -81,10 +82,10 @@ func (s *AuthService) auth() http.HandlerFunc {
 				jwtToken, jwtErr := GenerateJWT(userName)
 				if jwtErr != nil {
 					println(jwtErr)
-                     w.WriteHeader(400)
+					w.WriteHeader(400)
 					fmt.Fprintf(w, "error")
 				} else {
-                    w.Header().Add("jwt", jwtToken)
+					w.Header().Add("jwt", jwtToken)
 				}
 			}
 		} else {
@@ -96,27 +97,26 @@ func (s *AuthService) auth() http.HandlerFunc {
 }
 
 func (s *AuthService) checkToken() http.HandlerFunc {
-    return func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-        tokenString := r.Header.Get("jwt_token")
-        fmt.Println("check token" + tokenString)
+		tokenString := r.Header.Get("jwt_token")
+		fmt.Println("check token" + tokenString)
 
-        claims := jwt.MapClaims{}
+		claims := jwt.MapClaims{}
 
+		_, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte("tss"), nil
+		})
+		if err == nil {
 
-        _, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-            return []byte("tss"), nil
-        })
-        if err == nil {
-
-            userName, _ := claims["user"].(string)
-            fmt.Println("success parse for user" + userName);
-        } else {
-            fmt.Println("error parse")
-            fmt.Fprintf(w, "error")
-            fmt.Println(err)
-        }
-    }
+			userName, _ := claims["user"].(string)
+			fmt.Println("success parse for user" + userName)
+		} else {
+			fmt.Println("error parse")
+			fmt.Fprintf(w, "error")
+			fmt.Println(err)
+		}
+	}
 }
 
 func GenerateJWT(userName string) (string, error) {

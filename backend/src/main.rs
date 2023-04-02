@@ -22,7 +22,7 @@ fn world(client_mutex : State<DBMutex>) -> String {
 
 fn main() {
     let db_mutex = DBMutex {
-        mutex: Mutex::new(database::init_connection("127.0.0.1", "test_db", "test_user", "12345678").unwrap())
+        mutex: Mutex::new(database::init_connection("127.0.0.1", "test_db", "postgres", "12345678").unwrap())
     };
 
     rocket::ignite()
