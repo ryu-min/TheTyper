@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSpacerItem>
+#include <QToolTip>
 
 typer::gui::SettingsWidget::SettingsWidget(QWidget *parent)
     : QWidget( parent )
@@ -15,9 +16,13 @@ void typer::gui::SettingsWidget::buildForm()
 {
     QPushButton * exitButton = new QPushButton(this);
     exitButton->setGeometry(20, 20, 40, 40);
+    exitButton->setIcon(QIcon(":/icons/home.png"));
+    exitButton->setIconSize(QSize(40, 40));
+    exitButton->setToolTip("Go home");
+    exitButton->setStyleSheet("QPushButton {"
+                             "border: 0px;}");
     connect(exitButton, &QPushButton::clicked,
             this, &SettingsWidget::exit);
-    exitButton->setText("X");
 
     QVBoxLayout * labelLayout = new QVBoxLayout();
     labelLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
