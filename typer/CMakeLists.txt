@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
 
-# FOR WIN BUILD
-set (CMAKE_PREFIX_PATH "C:\\Qt\\6.4.2\\mingw_64")
-
 project(typer VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
