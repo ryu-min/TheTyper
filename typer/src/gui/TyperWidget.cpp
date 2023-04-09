@@ -7,6 +7,7 @@
 
 #include <QPlainTextEdit>
 #include <QTextEdit>
+#include <QToolTip>
 
 #include <QDebug>
 #include <QtNetwork/QNetworkAccessManager>
@@ -27,9 +28,13 @@ void typer::gui::TyperWidget::buildForm()
 {
     QPushButton * exitButton = new QPushButton(this);
     exitButton->setGeometry(20, 20, 40, 40);
+    exitButton->setIcon(QIcon(":/icons/home.png"));
+    exitButton->setIconSize(QSize(40, 40));
+    exitButton->setToolTip("Go home");
+    exitButton->setStyleSheet("QPushButton {"
+                             "border: 0px;}");
     connect(exitButton, &QPushButton::clicked,
             this, &TyperWidget::exit);
-    exitButton->setText("X");
 
     QVBoxLayout * labelLayout = new QVBoxLayout();
     labelLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
