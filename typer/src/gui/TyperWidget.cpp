@@ -1,4 +1,5 @@
 #include "TyperWidget.h"
+#include "../common/Network.h"
 
 #include <QApplication>
 #include <QHBoxLayout>
@@ -50,25 +51,9 @@ void typer::gui::TyperWidget::buildForm()
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
 
-    QString textToType;
-    QNetworkRequest textRequest( QUrl("http://127.0.0.1:8080/words/en_1000") );
-    bool requestFinished = false;
-    QNetworkAccessManager * manager = new QNetworkAccessManager;
-    connect(manager, &QNetworkAccessManager::finished, this, [&textToType, &requestFinished](QNetworkReply * reply) {
-        if ( reply->error() == QNetworkReply::NoError )
-        {
-            textToType = QString(reply->readAll());
-        }
-        else
-        {
-            qDebug() << "!!! request error";
-            textToType = " error error error error error error error error error error error error error error error error error "
-                         "error error error error error error error error error error error error error error error error error";
-        }
-        requestFinished = true;
-    });
-    manager->get(textRequest);
-    while ( !requestFinished ) qApp->processEvents();
+    QString textToType = typer::common::requestWords("en_1000").unwrapOr(QString("error"));
+    typer::common::WordsTypes wordsTypes = typer::common::requestWordTypes().unwrapOr(typer::common::WordsTypes());
+    qDebug() << "words types" << wordsTypes;
 
     textEdit->setTextColor(Qt::gray);
     textEdit->setTextColor(Qt::black);

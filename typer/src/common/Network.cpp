@@ -4,13 +4,15 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
+#include <QJsonDocument>
+
 
 namespace
 {
 
 QString getWordServiceUrlString()
 {
-    return "http://127.0.0.1:8000";
+    return "http://127.0.0.1:8080";
 }
 
 
@@ -104,8 +106,6 @@ typer::common::registerUser(const RegistrationInfo &info)
 
 bool typer::common::checkToken(JwtToken token)
 {
-    qDebug() << "send check token" << token;
-
     const QString requestString = QString("%1/check_token").arg(getAuthServiceUrlString());
 
     QNetworkAccessManager manager;
@@ -115,11 +115,7 @@ bool typer::common::checkToken(JwtToken token)
     QObject::connect(&manager, &QNetworkAccessManager::finished, &manager,
                      [&requestFinished, &success](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError ) {
-            qDebug() << "return succus";
             success = true;
-        }
-        else {
-            qDebug() << "return error";
         }
         qDebug() << reply->readAll();
         reply->deleteLater();
@@ -133,4 +129,66 @@ bool typer::common::checkToken(JwtToken token)
     while ( !requestFinished ) qApp->processEvents();
 
     return success;
+}
+
+typer::common::WordsRequestResult typer::common::requestWords(const WordsType &wordsType)
+{
+    QString stringUrl = getWordServiceUrlString()  + "/words/" + wordsType;
+    QNetworkRequest textRequest( stringUrl);
+    QString textToType;
+
+    QNetworkAccessManager manager;
+    bool requestFinished = false;
+    bool result = false;
+    QObject::connect(&manager, &QNetworkAccessManager::finished,
+            [&textToType, &requestFinished, &result](QNetworkReply * reply) {
+        if ( reply->error() == QNetworkReply::NoError )
+        {
+            textToType = QString(reply->readAll());
+            result = true;
+        }
+        requestFinished = true;
+    });
+    manager.get(textRequest);
+    while ( !requestFinished ) qApp->processEvents();
+    if ( result )
+    {
+        return Ok(textToType);
+    }
+    else
+    {
+        /// @todo another error handling
+        return Err( WordsRequestError::CONNECTION_ERROR );
+    }
+}
+
+typer::common::WordsTypesRequestResult typer::common::requestWordTypes()
+{
+    QString stringUrl = getWordServiceUrlString()  + "/supported";
+    QNetworkRequest textRequest( stringUrl);
+    QString wordTypesRaw;
+
+    QNetworkAccessManager manager;
+    bool requestFinished = false;
+    bool result = false;
+    QObject::connect(&manager, &QNetworkAccessManager::finished,
+            [&wordTypesRaw, &requestFinished, &result](QNetworkReply * reply) {
+        if ( reply->error() == QNetworkReply::NoError )
+        {
+            wordTypesRaw = QString(reply->readAll());
+            result = true;
+        }
+        requestFinished = true;
+    });
+    manager.get(textRequest);
+    while ( !requestFinished ) qApp->processEvents();
+    if ( result )
+    {
+        return Ok(wordTypesRaw.split(" "));
+    }
+    else
+    {
+        /// @todo another error handling
+        return Err( WordsTypesRequestError::CONNECTION_ERROR );
+    }
 }

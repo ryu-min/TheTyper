@@ -14,34 +14,45 @@ namespace typer
      */
     namespace common
     {
+
+        /// @todo think about combine all this error times
         enum class AuthError {
             CONNECTION_ERROR,
             USER_INFO_ERROR
+        };
+
+        enum class WordsRequestError
+        {
+            CONNECTION_ERROR
+        };
+
+        enum class WordsTypesRequestError
+        {
+            CONNECTION_ERROR
         };
 
         using JwtToken = QString;
 
         using AuthResult = Result<JwtToken, AuthError>;
 
-        /**
-         * @brief authUser
-         * @param info
-         * @return
-         */
+        using WordsRequestResult = Result<QString, WordsRequestError>;
+
+        using WordsType = QString;
+
+        using WordsTypes = QList<WordsType>;
+
+        using WordsTypesRequestResult = Result<WordsTypes, WordsTypesRequestError>;
+
         AuthResult authUser( const AuthentificationInfo & info );
 
-        /**
-         * @brief registerUser
-         * @param info
-         * @return
-         */
+        WordsRequestResult requestWords( const WordsType & wordsType );
+
+        WordsTypesRequestResult requestWordTypes();
+
         JwtToken registerUser( const RegistrationInfo & info );
 
-        /**
-         * @brief checkToken - test function
-         * @param token
-         * @return
-         */
         bool checkToken(JwtToken token);
+
+
     }
 }
