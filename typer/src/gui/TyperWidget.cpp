@@ -60,7 +60,9 @@ void typer::gui::TyperWidget::buildForm()
     textEdit->setAutoFillBackground(false);
     textEdit->setStyleSheet("border:0;");
 
-    m_textRenderer = new TextEditRenderer(textToType, textEdit, this);
+    QStringList wordsToType = textToType.split(' ');
+    std::random_shuffle(wordsToType.begin(), wordsToType.end());
+    m_textRenderer = new TextEditRenderer(wordsToType, textEdit, this);
     m_textRenderer->setIncorrectWordColor(Qt::red);
     m_textRenderer->setCorrectWordColor(Qt::darkCyan);
 

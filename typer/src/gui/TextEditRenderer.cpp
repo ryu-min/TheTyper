@@ -188,19 +188,22 @@ void typer::gui::TextEditRenderer::caclSpeed()
     qsizetype wordCount = std::min( m_typedTextToCalcSpeed.size(),
                               m_correctTextToCalcSpeed.size());
 
-    quint64 charTyped = 1; // space
+    quint64 charTyped = 0;
     for ( int i = 0; i < wordCount; ++i )
     {
         QString typed = m_typedTextToCalcSpeed[i];
         QString correct = m_correctTextToCalcSpeed[i];
         int size =  std::min( typed.size(), correct.size() );
+        bool hasSameLetters = false;
         for ( int j = 0; j < size; ++j )
         {
             if ( typed[j] == correct[j] )
             {
+                hasSameLetters = true;
                 charTyped += 1;
             }
         }
+        if ( hasSameLetters ) charTyped += 1; // space
     }
     ///  to the upper bound
     int speed = int( ( charTyped / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
