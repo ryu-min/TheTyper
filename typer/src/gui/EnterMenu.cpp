@@ -13,7 +13,6 @@ typer::gui::EnterMenu::EnterMenu(QWidget *parent)
 void typer::gui::EnterMenu::buildForm()
 {
     QVBoxLayout * buttonLayout = new QVBoxLayout();
-
     const int BUTTON_WIDTH = 200;
     const int BUTTON_HEIGHT = 50;
 

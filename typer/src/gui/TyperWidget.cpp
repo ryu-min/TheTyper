@@ -51,16 +51,13 @@ void typer::gui::TyperWidget::buildForm()
     textEdit->setPalette(palette);
 
     QString textToType;
-    QNetworkRequest textRequest( QUrl("http://127.0.0.1:8000/words") );
+    QNetworkRequest textRequest( QUrl("http://127.0.0.1:8080/words/en_1000") );
     bool requestFinished = false;
     QNetworkAccessManager * manager = new QNetworkAccessManager;
     connect(manager, &QNetworkAccessManager::finished, this, [&textToType, &requestFinished](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError )
         {
-            QString text = QString(reply->readAll());
-            QJsonDocument d = QJsonDocument::fromJson( reply->readAll() );
-            textToType = d.object().value("words").toString();
-            textToType = text;
+            textToType = QString(reply->readAll());
         }
         else
         {
