@@ -2,6 +2,8 @@
 
 #include <QTextEdit>
 #include <QColor>
+#include <QTimer>
+#include <QElapsedTimer>
 
 namespace typer
 {
@@ -31,8 +33,12 @@ namespace typer
                 m_notTypedWord = color;
             }
 
+        signals:
+            void speedCaclulated( int speed );
+
         protected slots:
             void textChanged();
+            void caclSpeed();
 
         protected:
             void startRendering();
@@ -83,6 +89,10 @@ namespace typer
             LineNumber m_currentLine;
             WordNumber m_typedWordInLine;
             LineText m_typedText;
+            QTimer m_calcSpeedTimer;
+            QElapsedTimer m_typeTimer;
+            QStringList m_typedTextToCalcSpeed;
+            QStringList m_correctTextToCalcSpeed;
         };
     }
 }

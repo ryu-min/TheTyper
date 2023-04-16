@@ -4,6 +4,8 @@
 #include <QScrollBar>
 #include <QApplication>
 
+#include <QElapsedTimer>
+
 typer::gui::TextEditRenderer::TextEditRenderer(const QString &textToType,
                                                QTextEdit *textEdit,
                                                QObject *parent)
@@ -30,12 +32,18 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     splitLines(wordsToType);
     setInitText();
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
+    connect(&m_calcSpeedTimer, QTimer::timeout, this, &typer::gui::TextEditRenderer::caclSpeed);
 }
 
 void typer::gui::TextEditRenderer::textChanged()
 {
     //@todo handle tab input (skip)
-
+    if ( !m_calcSpeedTimer.isActive() )
+    {
+        qDebug() << "start cacl";
+        m_calcSpeedTimer.start(2000);
+        m_typeTimer.start();
+    }
     if ( isRendering() ) return;
     RendererGuard rg(this);
     Q_UNUSED(rg);
@@ -78,6 +86,9 @@ void typer::gui::TextEditRenderer::textChanged()
             {
                 currentWordMode = WordTypeMode::IncorrectTypedWord;
             }
+            m_correctTextToCalcSpeed.append( correctWord );
+            m_typedTextToCalcSpeed.append( currentWord );
+
             WordIndex index = qMakePair(m_currentLine, m_typedWordInLine);
             m_typedWordInfo[index] = currentWordMode;
 
@@ -169,6 +180,32 @@ void typer::gui::TextEditRenderer::textChanged()
     {
         m_textEdit->insertPlainText( ' ' + m_lines[m_currentLine + 1 ] );
     }
+}
+
+void typer::gui::TextEditRenderer::caclSpeed()
+{
+    double msElapsed = m_typeTimer.elapsed();
+    qsizetype wordCount = std::min( m_typedTextToCalcSpeed.size(),
+                              m_correctTextToCalcSpeed.size());
+
+    quint64 charTyped = 1; // space
+    for ( int i = 0; i < wordCount; ++i )
+    {
+        QString typed = m_typedTextToCalcSpeed[i];
+        QString correct = m_correctTextToCalcSpeed[i];
+        int size =  std::min( typed.size(), correct.size() );
+        for ( int j = 0; j < size; ++j )
+        {
+            if ( typed[j] == correct[j] )
+            {
+                charTyped += 1;
+            }
+        }
+    }
+    ///  to the upper bound
+    int speed = int( ( charTyped / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
+    qDebug() << "speed is " << speed;
+    emit speedCaclulated( speed );
 }
 
 void typer::gui::TextEditRenderer::startRendering()

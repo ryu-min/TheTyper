@@ -51,7 +51,7 @@ void typer::gui::TyperWidget::buildForm()
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
 
-    QString textToType = typer::common::requestWords("en_1000").unwrapOr(QString("error"));
+    QString textToType = typer::common::requestWords("ru_5000").unwrapOr(QString("error"));
     typer::common::WordsTypes wordsTypes = typer::common::requestWordTypes().unwrapOr(typer::common::WordsTypes());
     qDebug() << "words types" << wordsTypes;
 
