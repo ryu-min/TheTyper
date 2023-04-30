@@ -39,7 +39,7 @@ namespace typer
 
         using WordsType = QString;
 
-        using WordsTypes = QList<WordsType>;
+        using WordsTypes = QStringList;
 
         using WordsTypesRequestResult = Result<WordsTypes, WordsTypesRequestError>;
 

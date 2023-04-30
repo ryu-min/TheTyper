@@ -32,7 +32,7 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     splitLines(wordsToType);
     setInitText();
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
-    connect(&m_calcSpeedTimer, QTimer::timeout, this, &typer::gui::TextEditRenderer::caclSpeed);
+    connect(&m_calcSpeedTimer, &QTimer::timeout, this, &typer::gui::TextEditRenderer::caclSpeed);
 }
 
 void typer::gui::TextEditRenderer::textChanged()
