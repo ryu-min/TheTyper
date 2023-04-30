@@ -13,7 +13,11 @@ namespace typer
             MainWindow(QWidget *parent = nullptr);
 
         private slots:
-            void openEnterMenu();
+            void showEnterWidget();
+            void showTyperWidget();
+            void showSettingsWidget();
+            void showAuthWidget();
+            void showRegistrationWidget();
         };
     }
 }
