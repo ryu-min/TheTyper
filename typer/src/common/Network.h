@@ -23,12 +23,14 @@ namespace typer
 
         enum class WordsRequestError
         {
-            CONNECTION_ERROR
+            CONNECTION_ERROR,
+            UNEXPECTED_RESULT
         };
 
         enum class WordsTypesRequestError
         {
-            CONNECTION_ERROR
+            CONNECTION_ERROR,
+            UNEXPECTED_RESULT
         };
 
         using JwtToken = QString;
@@ -52,7 +54,6 @@ namespace typer
         JwtToken registerUser( const RegistrationInfo & info );
 
         bool checkToken(JwtToken token);
-
 
     }
 }

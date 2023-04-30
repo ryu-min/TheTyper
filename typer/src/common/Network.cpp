@@ -1,11 +1,14 @@
 #include "Network.h"
 #include "WaitCoursor.h"
 
+#include "json/json.hpp"
+
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QJsonDocument>
 
+using json = nlohmann::json;
 
 namespace
 {
@@ -135,16 +138,16 @@ typer::common::WordsRequestResult typer::common::requestWords(const WordsType &w
 {
     QString stringUrl = getWordServiceUrlString()  + "/words/" + wordsType;
     QNetworkRequest textRequest( stringUrl);
-    QString textToType;
+    QString wordsRequestResult;
 
     QNetworkAccessManager manager;
     bool requestFinished = false;
     bool result = false;
     QObject::connect(&manager, &QNetworkAccessManager::finished,
-            [&textToType, &requestFinished, &result](QNetworkReply * reply) {
+            [&wordsRequestResult, &requestFinished, &result](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError )
         {
-            textToType = QString(reply->readAll());
+            wordsRequestResult = QString(reply->readAll());
             result = true;
         }
         requestFinished = true;
@@ -153,7 +156,16 @@ typer::common::WordsRequestResult typer::common::requestWords(const WordsType &w
     while ( !requestFinished ) qApp->processEvents();
     if ( result )
     {
-        return Ok(textToType);
+        auto j = json::parse(wordsRequestResult.toStdString());
+        if ( j.contains("words") )
+        {
+            auto wordsString = j["words"].get<std::string>();
+            return Ok(QString::fromStdString(wordsString));
+        }
+        else
+        {
+            return Err( WordsRequestError::UNEXPECTED_RESULT );
+        }
     }
     else
     {
@@ -166,16 +178,16 @@ typer::common::WordsTypesRequestResult typer::common::requestWordTypes()
 {
     QString stringUrl = getWordServiceUrlString()  + "/supported";
     QNetworkRequest textRequest( stringUrl);
-    QString wordTypesRaw;
+    QString wordTypesRequestResul;
 
     QNetworkAccessManager manager;
     bool requestFinished = false;
     bool result = false;
     QObject::connect(&manager, &QNetworkAccessManager::finished,
-            [&wordTypesRaw, &requestFinished, &result](QNetworkReply * reply) {
+            [&wordTypesRequestResul, &requestFinished, &result](QNetworkReply * reply) {
         if ( reply->error() == QNetworkReply::NoError )
         {
-            wordTypesRaw = QString(reply->readAll());
+            wordTypesRequestResul = QString(reply->readAll());
             result = true;
         }
         requestFinished = true;
@@ -184,8 +196,19 @@ typer::common::WordsTypesRequestResult typer::common::requestWordTypes()
     while ( !requestFinished ) qApp->processEvents();
     if ( result )
     {
-        return Ok(wordTypesRaw.split(" "));
+        auto j = json::parse(wordTypesRequestResul.toStdString());
+        if ( j.contains("types") )
+        {
+            auto typesString = j["types"].get<std::string>();
+            auto typesQString = QString::fromStdString(typesString);
+            return Ok(typesQString.split(" "));
+        }
+        else
+        {
+            return Err( WordsTypesRequestError::UNEXPECTED_RESULT );
+        }
     }
+
     else
     {
         /// @todo another error handling
