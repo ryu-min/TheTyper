@@ -41,8 +41,12 @@ void typer::gui::TyperWidget::buildForm()
     labelLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
 
     TyperTextEdit * textEdit = new TyperTextEdit();
-    textEdit->setMaximumWidth(500);
+
+    /// min widht - width of parent widget with offset
+    int minWidth = window() ? ( window()->width() - 150 ) : 600;
+    textEdit->setFixedWidth(minWidth);
     textEdit->setMaximumHeight(80);
+
     auto font = textEdit->font();
     font.setPointSize(18);
     textEdit->setFont(font);
@@ -52,8 +56,10 @@ void typer::gui::TyperWidget::buildForm()
     textEdit->setPalette(palette);
 
     QString textToType = typer::common::requestWords("ru_5000").unwrapOr(QString("error"));
-    typer::common::WordsTypes wordsTypes = typer::common::requestWordTypes().unwrapOr(typer::common::WordsTypes());
-    qDebug() << "words types" << wordsTypes;
+
+///         just example
+///   typer::common::WordsTypes wordsTypes = typer::common::requestWordTypes().unwrapOr(typer::common::WordsTypes());
+///   qDebug() << "words types" << wordsTypes;
 
     textEdit->setTextColor(Qt::gray);
     textEdit->setTextColor(Qt::black);

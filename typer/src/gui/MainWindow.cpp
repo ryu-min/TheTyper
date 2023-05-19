@@ -22,7 +22,7 @@ typer::gui::MainWindow::MainWindow(QWidget *parent)
 
 void typer::gui::MainWindow::showEnterWidget()
 {
-    EnterMenu * enterMenu = new EnterMenu;
+    EnterMenu * enterMenu = new EnterMenu(this);
     setCentralWidget( enterMenu );
     connect( enterMenu, &EnterMenu::start, this, &MainWindow::showTyperWidget );
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
@@ -32,21 +32,21 @@ void typer::gui::MainWindow::showEnterWidget()
 
 void typer::gui::MainWindow::showTyperWidget()
 {
-    TyperWidget * typerWidget = new TyperWidget;
+    TyperWidget * typerWidget = new TyperWidget(this);
     setCentralWidget( typerWidget );
     connect( typerWidget, &TyperWidget::exit, this, &MainWindow::showEnterWidget);
 }
 
 void typer::gui::MainWindow::showSettingsWidget()
 {
-    SettingsWidget * settingsWidget = new SettingsWidget;
+    SettingsWidget * settingsWidget = new SettingsWidget(this);
     setCentralWidget( settingsWidget );
     connect( settingsWidget, &SettingsWidget::exit, this, &MainWindow::showEnterWidget);
 }
 
 void typer::gui::MainWindow::showAuthWidget()
 {
-    AuthentificationWidget * authWidget = new AuthentificationWidget;
+    AuthentificationWidget * authWidget = new AuthentificationWidget(this);
     setCentralWidget( authWidget );
     connect( authWidget, &AuthentificationWidget::accepted,
              this, [this](const typer::common::AuthentificationInfo & info) {
@@ -67,7 +67,7 @@ void typer::gui::MainWindow::showAuthWidget()
 
 void typer::gui::MainWindow::showRegistrationWidget()
 {
-    RegistrationWidget * registrationWidget = new RegistrationWidget;
+    RegistrationWidget * registrationWidget = new RegistrationWidget(this);
     setCentralWidget( registrationWidget );
     connect( registrationWidget, &RegistrationWidget::accepted,
              [this](const typer::common::RegistrationInfo & info)
