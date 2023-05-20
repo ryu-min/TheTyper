@@ -65,12 +65,9 @@ void typer::gui::TextEditRenderer::textChanged()
         firstTypeBagFixed = true;
         return;
     }
-
-
-
     QString currentWord = splitedPreviousText.last();
 
-    ///
+    /// not allow space all the time
     if ( currentChar == ' ' && currentWord.isEmpty() )
     {
         return;
@@ -121,18 +118,11 @@ void typer::gui::TextEditRenderer::textChanged()
             m_typedText.append(currentChar);
         }
     }
-
     m_textEdit->clear();
     m_textEdit->setTextColor(Qt::black);
 
     int typedWordSize = 0;
-
-    /// updated splitedPreviousText
     QStringList typiedWords = m_typedText.split(" ");
-
-    /// в m_typedText не добавляются нужное количество пробелов
-    /// qDebug() << "typied text " << m_typedText;
-    /// qDebug() << "splited" << typiedWods;
     for ( int i = 0; i < m_typedWordInLine; ++i)
     {
         WordIndex index = qMakePair(m_currentLine, i);
@@ -145,23 +135,19 @@ void typer::gui::TextEditRenderer::textChanged()
         const QString typiedWord = typiedWords.size() <= i ? " " :  typiedWords[i];
         int minSize = std::min(correctWord.size(), typiedWord.size());
 
-        qDebug() << "first loop";
         for ( int i = 0; i < minSize; i++ )
         {
             QColor col = correctWord[i] == typiedWord[i] ? m_correctWordColor : m_incorrectWordColor;
             m_textEdit->setTextColor(col);
             m_textEdit->insertPlainText( correctWord[i] );
-            qDebug() << "insert" << QString(correctWord[i]);
         }
         /// not typied part of word
         int sizeDiff = correctWord.size() - minSize;
         int correctSize = correctWord.size();
         m_textEdit->setTextColor(m_incorrectWordColor);
-        qDebug() << "second loop";
         for ( int i = correctSize - sizeDiff; i < correctWord.size(); i++ )
         {
             m_textEdit->insertPlainText( correctWord[i] );
-            qDebug() << "insert" << QString(correctWord[i]);
         }
         m_textEdit->insertPlainText(" ");
         typedWordSize += correctWord.size() + 1;
@@ -190,7 +176,6 @@ void typer::gui::TextEditRenderer::textChanged()
         }
         typedWordSize  += len;
     }
-
 
     /// adding not tiped text
     const QString textToAdd = textToType.right( textToType.size() - typedWordSize );
@@ -227,7 +212,7 @@ void typer::gui::TextEditRenderer::caclSpeed()
     }
     ///  to the upper bound
     int speed = int( ( charTyped / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
-    //qDebug() << "speed is " << speed;
+    qDebug() << "speed is " << speed;
     emit speedCaclulated( speed );
 }
 
