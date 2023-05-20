@@ -230,7 +230,7 @@ void typer::gui::TextEditRenderer::splitLines(const QStringList &words)
 {
     int line = 0;
     const int textEditWidth = m_textEdit->width();
-    qDebug() << "text width " << textEditWidth;
+
     const QFontMetrics fontMetrics = m_textEdit->fontMetrics();
     const int scrollBarWidth = m_textEdit->verticalScrollBar()->sizeHint().width();
     for ( const QString & word : words )
