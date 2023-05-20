@@ -44,8 +44,7 @@ void typer::gui::TextEditRenderer::textChanged()
         m_typeTimer.start();
     }
     if ( isRendering() ) return;
-    RendererGuard rg(this);
-    Q_UNUSED(rg);
+    RendererGuard rg(this); Q_UNUSED(rg);
 
     m_textEdit->moveCursor( QTextCursor::End);
 
@@ -67,24 +66,17 @@ void typer::gui::TextEditRenderer::textChanged()
         return;
     }
 
+    /// new word typed
 
-    // new word typed
     if ( currentChar == ' ' )
     {
         if ( !m_typedText.isEmpty() )
         {
             QString currentWord = splitedPreviousText.last();
-            //Q_ASSERT(m_wordsToType.size() > m_wordTyped);
-            WordTypeMode currentWordMode;
             const QString correctWord = m_lines[m_currentLine].split(' ')[m_typedWordInLine];
-            if ( correctWord == currentWord )
-            {
-                currentWordMode = WordTypeMode::CorrectTypedWord;
-            }
-            else
-            {
-                currentWordMode = WordTypeMode::IncorrectTypedWord;
-            }
+            WordTypeMode currentWordMode = ( correctWord == currentWord )
+                                           ? WordTypeMode::CorrectTypedWord
+                                           : WordTypeMode::IncorrectTypedWord;
             m_correctTextToCalcSpeed.append( correctWord );
             m_typedTextToCalcSpeed.append( currentWord );
 
@@ -108,7 +100,7 @@ void typer::gui::TextEditRenderer::textChanged()
     }
     else
     {
-        // backspace typed
+        /// backspace typed
         if ( textFromWidget.size() < textToType.size() )
         {
             if ( !splitedPreviousText.last().isEmpty())
@@ -130,14 +122,10 @@ void typer::gui::TextEditRenderer::textChanged()
     {
         WordIndex index = qMakePair(m_currentLine, i);
         WordTypeMode mode = m_typedWordInfo[index];
-        if ( mode == WordTypeMode::CorrectTypedWord)
-        {
-            m_textEdit->setTextColor(m_correctWordColor);
-        }
-        else
-        {
-            m_textEdit->setTextColor(m_incorrectWordColor);
-        }
+        QColor wordColor = ( mode == WordTypeMode::CorrectTypedWord )
+                           ? m_correctWordColor
+                           : m_incorrectWordColor;
+        m_textEdit->setTextColor(wordColor);
         QString word = m_lines[m_currentLine].split(' ')[i];
         m_textEdit->insertPlainText(word + " ");
         typedWordSize += word.size() + 1;
@@ -166,8 +154,6 @@ void typer::gui::TextEditRenderer::textChanged()
         }
         typedWordSize  += len;
     }
-
-
 
     const QString textToAdd = textToType.right( textToType.size() - typedWordSize );
     m_textEdit->setTextColor(m_notTypedWord);
@@ -252,7 +238,6 @@ void typer::gui::TextEditRenderer::setInitText()
     {
         initText += ' ' + m_lines[1];
     }
-
     startRendering();
     m_textEdit->setTextColor(m_notTypedWord);
     m_textEdit->insertPlainText(initText);
