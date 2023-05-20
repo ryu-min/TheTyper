@@ -128,7 +128,7 @@ void typer::gui::TextEditRenderer::textChanged()
     int typedWordSize = 0;
 
     /// updated splitedPreviousText
-    QStringList typiedWods = m_typedText.split(" ");
+    QStringList typiedWords = m_typedText.split(" ");
 
     /// в m_typedText не добавляются нужное количество пробелов
     /// qDebug() << "typied text " << m_typedText;
@@ -142,9 +142,28 @@ void typer::gui::TextEditRenderer::textChanged()
                            : m_incorrectWordColor;
         m_textEdit->setTextColor(wordColor);
         const QString correctWord = m_lines[m_currentLine].split(' ')[i];
-        const QString typiedWord = typiedWods.size() <= i ? " " :  typiedWods[i];
-        qDebug() << "typed " << typiedWord << "; correct " << correctWord;
-        m_textEdit->insertPlainText(correctWord + " ");
+        const QString typiedWord = typiedWords.size() <= i ? " " :  typiedWords[i];
+        int minSize = std::min(correctWord.size(), typiedWord.size());
+
+        qDebug() << "first loop";
+        for ( int i = 0; i < minSize; i++ )
+        {
+            QColor col = correctWord[i] == typiedWord[i] ? m_correctWordColor : m_incorrectWordColor;
+            m_textEdit->setTextColor(col);
+            m_textEdit->insertPlainText( correctWord[i] );
+            qDebug() << "insert" << QString(correctWord[i]);
+        }
+        /// not typied part of word
+        int sizeDiff = correctWord.size() - minSize;
+        int correctSize = correctWord.size();
+        m_textEdit->setTextColor(m_incorrectWordColor);
+        qDebug() << "second loop";
+        for ( int i = correctSize - sizeDiff; i < correctWord.size(); i++ )
+        {
+            m_textEdit->insertPlainText( correctWord[i] );
+            qDebug() << "insert" << QString(correctWord[i]);
+        }
+        m_textEdit->insertPlainText(" ");
         typedWordSize += correctWord.size() + 1;
     }
 
