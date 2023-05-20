@@ -40,7 +40,6 @@ void typer::gui::TextEditRenderer::textChanged()
     //@todo handle tab input (skip)
     if ( !m_calcSpeedTimer.isActive() )
     {
-        qDebug() << "start cacl";
         m_calcSpeedTimer.start(2000);
         m_typeTimer.start();
     }
@@ -157,21 +156,18 @@ void typer::gui::TextEditRenderer::textChanged()
     if ( m_typedText.size() != typedWordSize  )
     {
         const QString partOfWord =  m_typedText.right( m_typedText.size() - typedWordSize );
-        //const QString fullWord = m_wordsToType[m_wordTyped];
         const QString fullWord = m_lines[m_currentLine].split(' ')[m_typedWordInLine];
-
-
-        if ( fullWord.startsWith(partOfWord) )
+        const int len = std::min(partOfWord.size(), fullWord.size() );
+        for ( int i = 0; i < len; i++ )
         {
-            m_textEdit->setTextColor(m_correctWordColor);
+            QColor charColor = ( partOfWord[i] == fullWord[i] ) ? m_correctWordColor : m_incorrectWordColor;
+            m_textEdit->setTextColor(charColor);
+            m_textEdit->insertPlainText(partOfWord[i]);
         }
-        else
-        {
-            m_textEdit->setTextColor(m_incorrectWordColor);
-        }
-        m_textEdit->insertPlainText(partOfWord);
-        typedWordSize  += partOfWord.size();
+        typedWordSize  += len;
     }
+
+
 
     const QString textToAdd = textToType.right( textToType.size() - typedWordSize );
     m_textEdit->setTextColor(m_notTypedWord);
