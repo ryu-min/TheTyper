@@ -66,17 +66,26 @@ void typer::gui::TextEditRenderer::textChanged()
         return;
     }
 
-    /// new word typed
 
+
+    QString currentWord = splitedPreviousText.last();
+
+    ///
+    if ( currentChar == ' ' && currentWord.isEmpty() )
+    {
+        return;
+    }
+
+    /// new word typed
     if ( currentChar == ' ' )
     {
         if ( !m_typedText.isEmpty() )
         {
-            QString currentWord = splitedPreviousText.last();
             const QString correctWord = m_lines[m_currentLine].split(' ')[m_typedWordInLine];
             WordTypeMode currentWordMode = ( correctWord == currentWord )
                                            ? WordTypeMode::CorrectTypedWord
                                            : WordTypeMode::IncorrectTypedWord;
+
             m_correctTextToCalcSpeed.append( correctWord );
             m_typedTextToCalcSpeed.append( currentWord );
 
@@ -91,11 +100,10 @@ void typer::gui::TextEditRenderer::textChanged()
             else
             {
                 m_typedText.remove(lastSpaceIndex, m_typedText.size() - lastSpaceIndex);
-                if ( m_typedText.back() != ' ') m_typedText.append(' ');
+                m_typedText.append(' ');
             }
-            m_typedText.append( correctWord + ' ' );
+            m_typedText.append( currentWord + ' ' );
             m_typedWordInLine++;
-
         }
     }
     else
@@ -118,6 +126,13 @@ void typer::gui::TextEditRenderer::textChanged()
     m_textEdit->setTextColor(Qt::black);
 
     int typedWordSize = 0;
+
+    /// updated splitedPreviousText
+    QStringList typiedWods = m_typedText.split(" ");
+
+    /// в m_typedText не добавляются нужное количество пробелов
+    /// qDebug() << "typied text " << m_typedText;
+    /// qDebug() << "splited" << typiedWods;
     for ( int i = 0; i < m_typedWordInLine; ++i)
     {
         WordIndex index = qMakePair(m_currentLine, i);
@@ -126,9 +141,11 @@ void typer::gui::TextEditRenderer::textChanged()
                            ? m_correctWordColor
                            : m_incorrectWordColor;
         m_textEdit->setTextColor(wordColor);
-        QString word = m_lines[m_currentLine].split(' ')[i];
-        m_textEdit->insertPlainText(word + " ");
-        typedWordSize += word.size() + 1;
+        const QString correctWord = m_lines[m_currentLine].split(' ')[i];
+        const QString typiedWord = typiedWods.size() <= i ? " " :  typiedWods[i];
+        qDebug() << "typed " << typiedWord << "; correct " << correctWord;
+        m_textEdit->insertPlainText(correctWord + " ");
+        typedWordSize += correctWord.size() + 1;
     }
 
     bool newLineMove = m_lines[m_currentLine].split(' ').size() == m_typedWordInLine;
@@ -141,9 +158,9 @@ void typer::gui::TextEditRenderer::textChanged()
     }
 
     /// only part of word typed
-    if ( m_typedText.size() != typedWordSize  )
+    if ( currentChar != ' ' )
     {
-        const QString partOfWord =  m_typedText.right( m_typedText.size() - typedWordSize );
+        const QString partOfWord =  m_typedText.split(" ").last();
         const QString fullWord = m_lines[m_currentLine].split(' ')[m_typedWordInLine];
         const int len = std::min(partOfWord.size(), fullWord.size() );
         for ( int i = 0; i < len; i++ )
@@ -155,6 +172,8 @@ void typer::gui::TextEditRenderer::textChanged()
         typedWordSize  += len;
     }
 
+
+    /// adding not tiped text
     const QString textToAdd = textToType.right( textToType.size() - typedWordSize );
     m_textEdit->setTextColor(m_notTypedWord);
     m_textEdit->insertPlainText(textToAdd);
@@ -189,7 +208,7 @@ void typer::gui::TextEditRenderer::caclSpeed()
     }
     ///  to the upper bound
     int speed = int( ( charTyped / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
-    qDebug() << "speed is " << speed;
+    //qDebug() << "speed is " << speed;
     emit speedCaclulated( speed );
 }
 
