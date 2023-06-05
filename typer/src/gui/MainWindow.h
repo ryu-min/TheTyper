@@ -2,6 +2,9 @@
 
 #include <QMainWindow>
 
+
+#include "EnterMenu.h"
+
 namespace typer
 {
     namespace gui

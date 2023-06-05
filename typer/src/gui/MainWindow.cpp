@@ -28,6 +28,7 @@ void typer::gui::MainWindow::showEnterWidget()
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
     connect( enterMenu, &EnterMenu::registration, this, &MainWindow::showRegistrationWidget );
     connect( enterMenu, &EnterMenu::auth, this, &MainWindow::showAuthWidget);
+    //enterMenu->setFocus();
 }
 
 void typer::gui::MainWindow::showTyperWidget()

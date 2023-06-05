@@ -27,12 +27,9 @@ typer::gui::TyperWidget::TyperWidget(QWidget *parent)
 
 void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
 {
-    qDebug() << size();
-
     QWidget::resizeEvent(event);
     QSizeF wSize = size();
     m_speedLabel->move( wSize.width() / 2, wSize.height()/2 - 80);
-
 }
 
 void typer::gui::TyperWidget::speedCalculated(int speed)

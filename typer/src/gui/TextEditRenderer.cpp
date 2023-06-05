@@ -209,7 +209,6 @@ void typer::gui::TextEditRenderer::caclSpeed()
     }
     ///  to the upper bound
     int speed = int( ( charTyped  / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
-    qDebug() << speed << "WPM";
     emit speedCaclulated( speed );
 }
 void typer::gui::TextEditRenderer::startRendering()

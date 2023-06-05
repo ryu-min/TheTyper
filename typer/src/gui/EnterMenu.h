@@ -19,8 +19,13 @@ namespace typer
             void auth();
             void registration();
 
+        protected:
+            void keyReleaseEvent(QKeyEvent *event) override;
+
         private:
             void buildForm();
+
+
         };
     }
 }
