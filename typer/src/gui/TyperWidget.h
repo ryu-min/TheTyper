@@ -6,6 +6,7 @@
 #include <QTextEdit>
 #include <QDebug>
 #include <QKeyEvent>
+#include <QLabel>
 
 namespace typer
 {
@@ -42,11 +43,19 @@ namespace typer
         signals:
             void exit();
 
+        protected:
+            void resizeEvent(QResizeEvent *event) override;
+
+        protected slots:
+            void speedCalculated(int speed);
+
         private:
             void buildForm();
 
         private:
             TextEditRenderer * m_textRenderer;
+            QLabel * m_speedLabel;
+
         };
     }
 }

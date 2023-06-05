@@ -25,9 +25,26 @@ typer::gui::TyperWidget::TyperWidget(QWidget *parent)
     buildForm();
 }
 
+void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
+{
+    qDebug() << size();
+
+    QWidget::resizeEvent(event);
+    QSizeF wSize = size();
+    m_speedLabel->move( wSize.width() / 2, wSize.height()/2 - 80);
+
+}
+
+void typer::gui::TyperWidget::speedCalculated(int speed)
+{
+    m_speedLabel->setText(QString("%1 WPM").arg(speed));
+    repaint();
+}
+
 void typer::gui::TyperWidget::buildForm()
 {
     QPushButton * exitButton = new QPushButton(this);
+
     exitButton->setGeometry(20, 20, 40, 40);
     exitButton->setIcon(QIcon(":/icons/home.png"));
     exitButton->setIconSize(QSize(40, 40));
@@ -57,10 +74,6 @@ void typer::gui::TyperWidget::buildForm()
 
     QString textToType = typer::common::requestWords("ru_5000").unwrapOr(QString("error"));
 
-///         just example
-///   typer::common::WordsTypes wordsTypes = typer::common::requestWordTypes().unwrapOr(typer::common::WordsTypes());
-///   qDebug() << "words types" << wordsTypes;
-
     textEdit->setTextColor(Qt::gray);
     textEdit->setTextColor(Qt::black);
     textEdit->setAutoFillBackground(false);
@@ -71,7 +84,8 @@ void typer::gui::TyperWidget::buildForm()
     m_textRenderer = new TextEditRenderer(wordsToType, textEdit, this);
     m_textRenderer->setIncorrectWordColor(Qt::red);
     m_textRenderer->setCorrectWordColor(Qt::darkCyan);
-
+    connect(m_textRenderer, &TextEditRenderer::speedCaclulated,
+            this, &TyperWidget::speedCalculated);
 
     labelLayout->addWidget( textEdit );
 
@@ -80,9 +94,22 @@ void typer::gui::TyperWidget::buildForm()
     QHBoxLayout * mainLayout = new QHBoxLayout(this);
     mainLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
 
-
     mainLayout->addLayout( labelLayout );
     mainLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
 
     setLayout( mainLayout );
+
+    m_speedLabel = new QLabel(this);
+
+    QPalette speedLablePallete;
+    speedLablePallete.setColor(QPalette::WindowText, Qt::gray);
+    m_speedLabel->move(0, 0);
+    font.setPointSize(24);
+    m_speedLabel->setFont(font);
+    m_speedLabel->setPalette(speedLablePallete);
+    m_speedLabel->setFixedWidth(100);
+    /// actualy hack
+    m_speedLabel->setMinimumWidth(minWidth);
+
+    m_speedLabel->setText("0 WPM");
 }
