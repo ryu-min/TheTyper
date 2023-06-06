@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWidget>
-
+#include <QComboBox>
 
 namespace typer
 {
@@ -11,19 +11,28 @@ namespace typer
         {
             Q_OBJECT
         public:
-            EnterMenu( QWidget * parent = nullptr);
+            EnterMenu( const QStringList & wordTypes,
+                       QWidget * parent = nullptr);
 
         signals:
-            void start();
+            void start(const QString & wordType);
             void settings();
             void auth();
             void registration();
 
         protected:
             void keyReleaseEvent(QKeyEvent *event) override;
+            void resizeEvent(QResizeEvent *event) override;
+            void showEvent(QShowEvent *event) override;
+
+        protected slots:
+            void emitStart();
 
         private:
-            void buildForm();
+            void buildForm(const QStringList & wordTypes);
+
+        private:
+            QComboBox * m_wordTypeComboBox;
 
 
         };

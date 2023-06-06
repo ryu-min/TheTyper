@@ -4,11 +4,14 @@
 #include <QPushButton>
 #include <QSpacerItem>
 #include <QKeyEvent>
+#include <QAbstractItemView>
 
-typer::gui::EnterMenu::EnterMenu(QWidget *parent)
+typer::gui::EnterMenu::EnterMenu(const QStringList & wordTypes,
+                                 QWidget *parent)
     : QWidget( parent )
+    , m_wordTypeComboBox(new QComboBox(this))
 {
-    buildForm();
+    buildForm(wordTypes);
     setFocusPolicy(Qt::StrongFocus);
 }
 
@@ -17,11 +20,30 @@ void typer::gui::EnterMenu::keyReleaseEvent(QKeyEvent *event)
     QWidget::keyReleaseEvent(event);
     if ( (event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return) )
     {
-        emit start();
+        emitStart();
     }
 }
 
-void typer::gui::EnterMenu::buildForm()
+void typer::gui::EnterMenu::resizeEvent(QResizeEvent *event)
+{
+    int widgetWidth = size().width();
+    int cbWidth     = m_wordTypeComboBox->size().width();
+    m_wordTypeComboBox->move(widgetWidth - cbWidth - 20, 20);
+    QWidget::resizeEvent(event);
+}
+
+void typer::gui::EnterMenu::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    setFocus();
+}
+
+void typer::gui::EnterMenu::emitStart()
+{
+     emit start(m_wordTypeComboBox->currentText());
+}
+
+void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
 {
     QVBoxLayout * buttonLayout = new QVBoxLayout();
     const int BUTTON_WIDTH = 300;
@@ -32,7 +54,7 @@ void typer::gui::EnterMenu::buildForm()
 
     startButton->setFixedWidth( BUTTON_WIDTH );
     startButton->setFixedHeight( BUTTON_HEIGHT );
-    connect( startButton, &QPushButton::clicked, this, &EnterMenu::start);
+    connect( startButton, &QPushButton::clicked, this, &EnterMenu::emitStart);
 
     QPalette startButtonPallete = startButton->palette();
     startButtonPallete.setColor(QPalette::WindowText, Qt::gray);
@@ -62,4 +84,11 @@ void typer::gui::EnterMenu::buildForm()
     mainLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding) );
 
     setLayout( mainLayout );
+
+    font.setPointSize(14);
+    m_wordTypeComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    m_wordTypeComboBox->setFont(font);
+    m_wordTypeComboBox->setPalette(startButtonPallete);
+    m_wordTypeComboBox->move(0, 0);
+    m_wordTypeComboBox->addItems(wordTypes);
 }

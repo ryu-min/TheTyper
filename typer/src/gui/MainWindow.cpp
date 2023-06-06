@@ -22,18 +22,18 @@ typer::gui::MainWindow::MainWindow(QWidget *parent)
 
 void typer::gui::MainWindow::showEnterWidget()
 {
-    EnterMenu * enterMenu = new EnterMenu(this);
+    auto wordTypes = common::requestWordTypes().unwrapOr(common::WordsTypes());
+    EnterMenu * enterMenu = new EnterMenu(wordTypes, this);
     setCentralWidget( enterMenu );
     connect( enterMenu, &EnterMenu::start, this, &MainWindow::showTyperWidget );
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
     connect( enterMenu, &EnterMenu::registration, this, &MainWindow::showRegistrationWidget );
     connect( enterMenu, &EnterMenu::auth, this, &MainWindow::showAuthWidget);
-    //enterMenu->setFocus();
 }
 
-void typer::gui::MainWindow::showTyperWidget()
+void typer::gui::MainWindow::showTyperWidget(const QString &wordType)
 {
-    TyperWidget * typerWidget = new TyperWidget(this);
+    TyperWidget * typerWidget = new TyperWidget(wordType, this);
     setCentralWidget( typerWidget );
     connect( typerWidget, &TyperWidget::exit, this, &MainWindow::showEnterWidget);
 }

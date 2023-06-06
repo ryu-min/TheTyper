@@ -176,6 +176,8 @@ typer::common::WordsRequestResult typer::common::requestWords(const WordsType &w
 
 typer::common::WordsTypesRequestResult typer::common::requestWordTypes()
 {
+    WaitCoursor wc; Q_UNUSED(wc);
+
     QString stringUrl = getWordServiceUrlString()  + "/supported";
     QNetworkRequest textRequest( stringUrl);
     QString wordTypesRequestResul;

@@ -38,7 +38,8 @@ namespace typer
         {
             Q_OBJECT
         public:
-            TyperWidget( QWidget * parent = nullptr);
+            TyperWidget( const QString & wordType,
+                         QWidget * parent = nullptr);
 
         signals:
             void exit();
@@ -50,7 +51,7 @@ namespace typer
             void speedCalculated(int speed);
 
         private:
-            void buildForm();
+            void buildForm(const QString & wordType);
 
         private:
             TextEditRenderer * m_textRenderer;

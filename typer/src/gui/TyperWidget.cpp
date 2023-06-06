@@ -19,10 +19,11 @@
 #include <QJsonObject>
 #include <QJsonValue>
 
-typer::gui::TyperWidget::TyperWidget(QWidget *parent)
+typer::gui::TyperWidget::TyperWidget(const QString &wordType,
+                                     QWidget *parent)
     : QWidget( parent )
 {
-    buildForm();
+    buildForm(wordType);
 }
 
 void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
@@ -38,7 +39,7 @@ void typer::gui::TyperWidget::speedCalculated(int speed)
     repaint();
 }
 
-void typer::gui::TyperWidget::buildForm()
+void typer::gui::TyperWidget::buildForm(const QString &wordType)
 {
     QPushButton * exitButton = new QPushButton(this);
 
@@ -69,7 +70,8 @@ void typer::gui::TyperWidget::buildForm()
     palette.setColor(QPalette::Base, QColor(255, 255, 255, 0));
     textEdit->setPalette(palette);
 
-    QString textToType = typer::common::requestWords("ru_5000").unwrapOr(QString("error"));
+    QString textToType = typer::common::requestWords(wordType)
+                         .unwrapOr(QString("error"));
 
     textEdit->setTextColor(Qt::gray);
     textEdit->setTextColor(Qt::black);
