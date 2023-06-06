@@ -30,7 +30,10 @@ void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
     QSizeF wSize = size();
-    m_speedLabel->move( wSize.width() / 2, wSize.height()/2 - 80);
+    QSizeF sSize = m_speedLabel->size();
+    qDebug() << sSize;
+    m_speedLabel->move( wSize.width() / 2 - sSize.width() / 2,
+                        wSize.height()/2 - 80);
 }
 
 void typer::gui::TyperWidget::speedCalculated(int speed)
@@ -106,9 +109,7 @@ void typer::gui::TyperWidget::buildForm(const QString &wordType)
     font.setPointSize(24);
     m_speedLabel->setFont(font);
     m_speedLabel->setPalette(speedLablePallete);
-    m_speedLabel->setFixedWidth(100);
-    /// actualy hack
-    m_speedLabel->setMinimumWidth(minWidth);
 
-    m_speedLabel->setText("0 WPM");
+    m_speedLabel->setText("  0 WPM");
+    m_speedLabel->adjustSize();
 }
