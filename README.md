@@ -9,7 +9,7 @@ Currently, the application consists of two windows:
 
 <img src="https://github.com/The-Typer/.github/raw/main/profile/main_page.png" alt="Image alt" width="500" height="300">
 
-2. Typing window - displays the words to be typed and the typing speed. 
+2. Typing window - displays the words to be typed and the typing speed. Pressing Esc quit the typing test.
 
 <img src="https://github.com/The-Typer/.github/raw/main/profile/typing_page.png" alt="Image alt" width="500" height="300">
 
