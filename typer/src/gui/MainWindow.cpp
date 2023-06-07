@@ -53,7 +53,6 @@ void typer::gui::MainWindow::showAuthWidget()
              this, [this](const typer::common::AuthentificationInfo & info) {
         common::JwtToken token = common::authUser( info )
                 .unwrapOr(common::JwtToken(""));
-        qDebug() << "recieve tokent" << token;
         if ( token.isEmpty() ) {
             QMessageBox::warning(this, "Authentification error", "some error");
         }
@@ -74,7 +73,6 @@ void typer::gui::MainWindow::showRegistrationWidget()
              [this](const typer::common::RegistrationInfo & info)
     {
         common::JwtToken token = common::registerUser( info );
-        qDebug() << "recieve tokent" << token;
         if ( token.isEmpty() ) {
             QMessageBox::warning(this, "Registration error", "some error");
         }

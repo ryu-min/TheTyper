@@ -34,8 +34,8 @@ void typer::gui::EnterMenu::resizeEvent(QResizeEvent *event)
 
 void typer::gui::EnterMenu::showEvent(QShowEvent *event)
 {
-    QWidget::showEvent(event);
     setFocus();
+    QWidget::showEvent(event);
 }
 
 void typer::gui::EnterMenu::emitStart()

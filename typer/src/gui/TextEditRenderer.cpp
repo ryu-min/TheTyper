@@ -1,9 +1,7 @@
 #include "TextEditRenderer.h"
 
-#include <QDebug>
 #include <QScrollBar>
 #include <QApplication>
-
 #include <QElapsedTimer>
 
 typer::gui::TextEditRenderer::TextEditRenderer(const QString &textToType,

@@ -44,7 +44,6 @@ typer::common::authUser(const AuthentificationInfo &info)
         if ( reply->error() == QNetworkReply::NoError ) {
             token = reply->readAll();
             if ( reply->hasRawHeader("jwt") ) {
-                qDebug() << "has header";
                 token = reply->rawHeader("jwt");
             }
             else
@@ -52,7 +51,8 @@ typer::common::authUser(const AuthentificationInfo &info)
                 qDebug() << "has not jwt token";
             }
         }
-        else {
+        else
+        {
             qDebug() << "recieve error" << reply->error();
         }
         reply->deleteLater();

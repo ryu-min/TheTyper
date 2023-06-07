@@ -4,7 +4,6 @@
 
 #include <QWidget>
 #include <QTextEdit>
-#include <QDebug>
 #include <QKeyEvent>
 #include <QLabel>
 

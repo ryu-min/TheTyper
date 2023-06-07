@@ -10,7 +10,6 @@
 #include <QTextEdit>
 #include <QToolTip>
 
-#include <QDebug>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
@@ -31,7 +30,6 @@ void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
     QSizeF wSize = size();
     QSizeF sSize = m_speedLabel->size();
-    qDebug() << sSize;
     m_speedLabel->move( wSize.width() / 2 - sSize.width() / 2,
                         wSize.height()/2 - 80);
 }
