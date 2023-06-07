@@ -64,16 +64,6 @@ void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
     font.setPointSize(18);
     startButton->setFont(font);
 
-    QPushButton * settingsButton = new QPushButton(this);
-    settingsButton->setGeometry(20, 20, 40, 40);
-    settingsButton->setIcon(QIcon(":/icons/settings.png"));
-    settingsButton->setIconSize(QSize(40, 40));
-    settingsButton->setToolTip("Go to settings");
-    settingsButton->setStyleSheet("QPushButton { border: 0px; }");
-
-    connect( settingsButton, &QPushButton::clicked, this, &EnterMenu::settings);
-
-
     buttonLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding) );
     buttonLayout->addWidget( startButton );
     buttonLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding) );

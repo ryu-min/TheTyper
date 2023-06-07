@@ -19,8 +19,6 @@ namespace typer
             void showEnterWidget();
             void showTyperWidget(const QString & wordType);
             void showSettingsWidget();
-            void showAuthWidget();
-            void showRegistrationWidget();
         };
     }
 }

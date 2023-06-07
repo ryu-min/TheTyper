@@ -34,6 +34,15 @@ void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
                         wSize.height()/2 - 80);
 }
 
+void typer::gui::TyperWidget::keyPressEvent(QKeyEvent *event)
+{
+    QWidget::keyPressEvent(event);
+    if ( event->key() == Qt::Key_Escape )
+    {
+        emit exit();
+    }
+}
+
 void typer::gui::TyperWidget::speedCalculated(int speed)
 {
     m_speedLabel->setText(QString("%1 WPM").arg(speed));
@@ -42,16 +51,25 @@ void typer::gui::TyperWidget::speedCalculated(int speed)
 
 void typer::gui::TyperWidget::buildForm(const QString &wordType)
 {
-    QPushButton * exitButton = new QPushButton(this);
+    QLabel * exitLabel = new QLabel(this);
 
-    exitButton->setGeometry(20, 20, 40, 40);
-    exitButton->setIcon(QIcon(":/icons/home.png"));
-    exitButton->setIconSize(QSize(40, 40));
-    exitButton->setToolTip("Go home");
-    exitButton->setStyleSheet("QPushButton {"
-                             "border: 0px;}");
-    connect(exitButton, &QPushButton::clicked,
-            this, &TyperWidget::exit);
+    auto labelFont = exitLabel->font();
+    labelFont.setPointSize(14);
+    exitLabel->setFont(labelFont);
+
+    auto labelPalette = exitLabel->palette();
+    labelPalette.setColor( QPalette::WindowText, Qt::gray );
+    exitLabel->setPalette(labelPalette);
+
+    exitLabel->setText("ESC to exit");
+    exitLabel->move(20, 20);
+    exitLabel->adjustSize();
+
+    QTimer::singleShot(3000, this, [exitLabel]()
+    {
+        exitLabel->deleteLater();
+    });
+
 
     QVBoxLayout * labelLayout = new QVBoxLayout();
     labelLayout->addItem( new QSpacerItem(10, 10, QSizePolicy::Maximum, QSizePolicy::Maximum) );
@@ -102,7 +120,8 @@ void typer::gui::TyperWidget::buildForm(const QString &wordType)
     m_speedLabel = new QLabel(this);
 
     QPalette speedLablePallete;
-    speedLablePallete.setColor(QPalette::WindowText, Qt::gray);
+    speedLablePallete.setColor( QPalette::WindowText, Qt::gray );
+
     m_speedLabel->move(0, 0);
     font.setPointSize(24);
     m_speedLabel->setFont(font);

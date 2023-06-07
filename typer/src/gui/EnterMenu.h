@@ -17,8 +17,6 @@ namespace typer
         signals:
             void start(const QString & wordType);
             void settings();
-            void auth();
-            void registration();
 
         protected:
             void keyReleaseEvent(QKeyEvent *event) override;
@@ -33,8 +31,6 @@ namespace typer
 
         private:
             QComboBox * m_wordTypeComboBox;
-
-
         };
     }
 }

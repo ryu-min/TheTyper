@@ -45,6 +45,7 @@ namespace typer
 
         protected:
             void resizeEvent(QResizeEvent *event) override;
+            void keyPressEvent(QKeyEvent *event);
 
         protected slots:
             void speedCalculated(int speed);
