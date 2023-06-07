@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/home.png</file>
-        <file>icons/settings.png</file>
+        <file>icons/typer.png</file>
     </qresource>
 </RCC>

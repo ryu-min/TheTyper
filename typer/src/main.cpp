@@ -7,8 +7,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    typer::gui::MainWindow w;
+    a.setWindowIcon(QIcon(":/icons/typer.png"));
 
+    typer::gui::MainWindow w;
+    w.setWindowTitle("The Typer");
     QRect screenRect = QApplication::primaryScreen()->geometry();
     w.resize(screenRect.width() * 0.7, screenRect.height() * 0.5);
 
