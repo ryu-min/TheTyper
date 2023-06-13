@@ -2,8 +2,8 @@
 
 #include "SettingsFile.h"
 
-static typer::common::settings::SettingsFile generalSettingsFile("general.txt");
-static typer::common::settings::SettingsFile testSettingsFile("test.txt");
+static typer::common::settings::SettingsFile generalSettingsFile("general.typer");
+static typer::common::settings::SettingsFile GUISettingsFile("gui.typer");
 
 
 void typer::common::settings::setGeneralSetting(const QString &valueKey, const QVariant &value)
@@ -11,17 +11,17 @@ void typer::common::settings::setGeneralSetting(const QString &valueKey, const Q
     generalSettingsFile.setValue(valueKey, value);
 }
 
-QVariant typer::common::settings::getGeneralSetting(const QString &valueKey)
+QVariant typer::common::settings::getGeneralSetting(const QString &valueKey, const QVariant &defaultValue)
 {
-    return generalSettingsFile.getValue(valueKey);
+    return generalSettingsFile.getValue(valueKey, defaultValue);
 }
 
-void typer::common::settings::setTestSetting(const QString &valueKey, const QVariant &value)
+void typer::common::settings::setGUISetting(const QString &valueKey, const QVariant &value)
 {
-    testSettingsFile.setValue(valueKey, value);
+    GUISettingsFile.setValue(valueKey, value);
 }
 
-QVariant typer::common::settings::getTestSetting(const QString &valueKey)
+QVariant typer::common::settings::getGUISetting(const QString &valueKey, const QVariant &defaultValue)
 {
-    return testSettingsFile.getValue(valueKey);
+    return GUISettingsFile.getValue(valueKey, defaultValue);
 }

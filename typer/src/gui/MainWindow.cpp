@@ -5,11 +5,13 @@
 #include "TyperWidget.h"
 
 #include "../common/Network.h"
+#include "../common/settings/TyperSettings.h"
 
 #include <QApplication>
-#include <QPushButton>
-#include <QMessageBox>
 
+
+static const QString WINDOW_SIZE_SETTINGS_KEY   = "window_size";
+static const QString WINDOW_POS_SETTINGS_KEY    = "window_pos";
 
 typer::gui::MainWindow::MainWindow(QWidget *parent)
     : QMainWindow( parent )
@@ -17,6 +19,12 @@ typer::gui::MainWindow::MainWindow(QWidget *parent)
 {
     updateWordTypes();
     showEnterWidget();
+    restoreWindowSettings();
+}
+
+typer::gui::MainWindow::~MainWindow()
+{
+    storeWindowSettings();
 }
 
 void typer::gui::MainWindow::showEnterWidget()
@@ -46,3 +54,30 @@ void typer::gui::MainWindow::updateWordTypes()
 {
     m_wordTypes = common::requestWordTypes().unwrapOr(common::WordsTypes());
 }
+
+void typer::gui::MainWindow::restoreWindowSettings()
+{
+    QSize windowSize = common::settings::getGUISetting( WINDOW_SIZE_SETTINGS_KEY,
+                                                        QSize(600, 400) )
+                       .toSize();
+    resize( windowSize );
+
+    QPoint windowPos = common::settings::getGUISetting( WINDOW_POS_SETTINGS_KEY,
+                                                        getDefaultWindowPos() )
+                       .toPoint();
+
+    move( windowPos );
+}
+
+void typer::gui::MainWindow::storeWindowSettings()
+{
+    common::settings::setGUISetting( WINDOW_SIZE_SETTINGS_KEY, size() );
+    common::settings::setGUISetting( WINDOW_POS_SETTINGS_KEY, pos() );
+}
+
+QPoint typer::gui::MainWindow::getDefaultWindowPos()
+{
+    return QApplication::primaryScreen()->geometry().center() - rect().center();
+}
+
+

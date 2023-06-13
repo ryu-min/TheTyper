@@ -12,15 +12,14 @@ namespace typer
             void setGeneralSetting(const QString & valueKey,
                                    const QVariant & value);
 
-            QVariant getGeneralSetting(const QString & valueKey);
+            QVariant getGeneralSetting(const QString & valueKey,
+                                       const QVariant & defaultValue = QVariant());
 
+            void setGUISetting(const QString & valueKey,
+                               const QVariant & value);
 
-            void setTestSetting(const QString & valueKey,
-                                   const QVariant & value);
-
-            QVariant getTestSetting(const QString & valueKey);
-
-
+            QVariant getGUISetting(const QString & valueKey,
+                                   const QVariant & defaultValue = QVariant());
         }
     }
 }

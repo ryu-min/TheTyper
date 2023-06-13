@@ -15,7 +15,7 @@ void typer::common::settings::SettingsFile::setValue(const QString &valueKey, co
     m_settings.sync();
 }
 
-QVariant typer::common::settings::SettingsFile::getValue(const QString &valueKey)
+QVariant typer::common::settings::SettingsFile::getValue(const QString &valueKey, const QVariant &defaultValue)
 {
-    return m_settings.value(valueKey);
+    return m_settings.value(valueKey, defaultValue);
 }

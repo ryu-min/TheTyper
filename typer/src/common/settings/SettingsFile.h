@@ -30,7 +30,8 @@ namespace typer
                              const QDir & baseDir = QDir(getDefaultSettingFolderPath()),
                              QObject * parent = nullptr);
 
-                QVariant getValue( const QString & valueKey);
+                QVariant getValue( const QString & valueKey,
+                                   const QVariant & defaultValue = QVariant());
 
             public slots:
 
