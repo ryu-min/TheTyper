@@ -19,6 +19,10 @@ namespace typer
             void showEnterWidget();
             void showTyperWidget(const QString & wordType);
             void showSettingsWidget();
+            void updateWordTypes();
+
+        private:
+            QStringList m_wordTypes;
         };
     }
 }

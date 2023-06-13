@@ -13,14 +13,16 @@
 
 typer::gui::MainWindow::MainWindow(QWidget *parent)
     : QMainWindow( parent )
+    , m_wordTypes()
 {
+    updateWordTypes();
     showEnterWidget();
 }
 
 void typer::gui::MainWindow::showEnterWidget()
 {
-    auto wordTypes = common::requestWordTypes().unwrapOr(common::WordsTypes());
-    EnterMenu * enterMenu = new EnterMenu(wordTypes, this);
+    if ( m_wordTypes.isEmpty() ) updateWordTypes();
+    EnterMenu * enterMenu = new EnterMenu(m_wordTypes, this);
     setCentralWidget( enterMenu );
     connect( enterMenu, &EnterMenu::start, this, &MainWindow::showTyperWidget );
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
@@ -38,4 +40,9 @@ void typer::gui::MainWindow::showSettingsWidget()
     SettingsWidget * settingsWidget = new SettingsWidget(this);
     setCentralWidget( settingsWidget );
     connect( settingsWidget, &SettingsWidget::exit, this, &MainWindow::showEnterWidget);
+}
+
+void typer::gui::MainWindow::updateWordTypes()
+{
+    m_wordTypes = common::requestWordTypes().unwrapOr(common::WordsTypes());
 }

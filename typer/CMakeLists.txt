@@ -23,6 +23,8 @@ file (GLOB_RECURSE PROJECT_SOURCES
             "${SOURCE_DIR}/*.cpp"
             "${SOURCE_DIR}/common/result/*.h"            
             "${SOURCE_DIR}/common/json/*.hpp"
+            "${SOURCE_DIR}/common/settings/*.h"
+            "${SOURCE_DIR}/common/settings/*.cpp"
             "${SOURCE_DIR}/common/*.h"
             "${SOURCE_DIR}/common/*.cpp"
             "${SOURCE_DIR}/gui/*.h"
