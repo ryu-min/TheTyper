@@ -28,9 +28,11 @@ namespace typer
 
         private:
             void buildForm(const QStringList & wordTypes);
+            void updateComboBoxesPos();
 
         private:
             QComboBox * m_wordTypeComboBox;
+            QComboBox * m_timeComboBox;
         };
     }
 }

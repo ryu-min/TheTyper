@@ -38,7 +38,7 @@ void typer::gui::TextEditRenderer::textChanged()
     //@todo handle tab input (skip)
     if ( !m_calcSpeedTimer.isActive() )
     {
-        m_calcSpeedTimer.start(500);
+        m_calcSpeedTimer.start(1500);
         m_typeTimer.start();
     }
     if ( isRendering() ) return;

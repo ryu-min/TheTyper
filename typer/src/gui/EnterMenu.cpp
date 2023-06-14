@@ -10,6 +10,7 @@ typer::gui::EnterMenu::EnterMenu(const QStringList & wordTypes,
                                  QWidget *parent)
     : QWidget( parent )
     , m_wordTypeComboBox(new QComboBox(this))
+    , m_timeComboBox( new QComboBox(this) )
 {
     buildForm(wordTypes);
     setFocusPolicy(Qt::StrongFocus);
@@ -18,7 +19,11 @@ typer::gui::EnterMenu::EnterMenu(const QStringList & wordTypes,
 void typer::gui::EnterMenu::keyReleaseEvent(QKeyEvent *event)
 {
     QWidget::keyReleaseEvent(event);
-    if ( (event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return) )
+    bool enterPressed = (    (event->key() == Qt::Key_Enter)
+                          || (event->key() == Qt::Key_Return) );
+    bool ctrlPressed = ( event->modifiers() & Qt::ControlModifier );
+
+    if ( enterPressed && ctrlPressed )
     {
         emitStart();
     }
@@ -26,15 +31,14 @@ void typer::gui::EnterMenu::keyReleaseEvent(QKeyEvent *event)
 
 void typer::gui::EnterMenu::resizeEvent(QResizeEvent *event)
 {
-    int widgetWidth = size().width();
-    int cbWidth     = m_wordTypeComboBox->size().width();
-    m_wordTypeComboBox->move(widgetWidth - cbWidth - 20, 20);
+    updateComboBoxesPos();
     QWidget::resizeEvent(event);
 }
 
 void typer::gui::EnterMenu::showEvent(QShowEvent *event)
 {
     setFocus();
+    updateComboBoxesPos();
     QWidget::showEvent(event);
 }
 
@@ -49,7 +53,7 @@ void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
     const int BUTTON_WIDTH = 300;
     const int BUTTON_HEIGHT = 50;
 
-    QPushButton * startButton = new QPushButton("Press enter to start", this);
+    QPushButton * startButton = new QPushButton("Ctrl + Enter to start", this);
     startButton->setStyleSheet("QPushButton {background-color: rgba(255, 255, 255, 0); color: gray;}");
 
     startButton->setFixedWidth( BUTTON_WIDTH );
@@ -81,4 +85,46 @@ void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
     m_wordTypeComboBox->setPalette(startButtonPallete);
     m_wordTypeComboBox->move(0, 0);
     m_wordTypeComboBox->addItems(wordTypes);
+
+    m_timeComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    m_timeComboBox->setFont(font);
+    m_timeComboBox->setPalette(startButtonPallete);
+    //m_timeComboBox->move(0, 0);
+    const QStringList times = QStringList()
+                              << "15s"
+                              << "30s"
+                              << "60s"
+                              << "120s";
+    m_timeComboBox->addItems(times);
+
+    m_timeComboBox->setStyleSheet("QComboBox { background-color: transparent; color: gray;}");
+
+    m_timeComboBox->view()->setStyleSheet("QComboBox QAbstractItemView { background-color: transparent;  color: white; } "
+                                          " QComboBox QAbstractItemView::item:selected { background-color: rgb(40, 40, 40); }"
+                                          " QComboBox QAbstractItemView::item {background-color: gray; } ");
+
+    m_wordTypeComboBox->setStyleSheet("QComboBox { background-color: transparent; color: gray;}");
+    m_wordTypeComboBox->view()->setStyleSheet("QComboBox QAbstractItemView { background-color: transparent;  color: white; } "
+                                          " QComboBox QAbstractItemView::item:selected { background-color: rgb(40, 40, 40); }"
+                                          " QComboBox QAbstractItemView::item {background-color: gray; }");
+
+
+    connect(m_timeComboBox, &QComboBox::currentTextChanged, m_timeComboBox, [startButton]() {
+        startButton->setFocus();
+    });
+
+    connect(m_wordTypeComboBox, &QComboBox::currentTextChanged, m_timeComboBox, [startButton]() {
+        startButton->setFocus();
+    });
+    m_wordTypeComboBox->adjustSize();
+
+    updateComboBoxesPos();
+}
+
+void typer::gui::EnterMenu::updateComboBoxesPos()
+{
+    int widgetWidth = size().width();
+    int cbWidth     = m_timeComboBox->sizeHint().width();
+    m_timeComboBox->move(widgetWidth - cbWidth - 10, 10);
+    m_wordTypeComboBox->move(QPoint(10, 10));
 }

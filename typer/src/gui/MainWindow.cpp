@@ -9,7 +9,6 @@
 
 #include <QApplication>
 
-
 static const QString WINDOW_SIZE_SETTINGS_KEY   = "window_size";
 static const QString WINDOW_POS_SETTINGS_KEY    = "window_pos";
 
