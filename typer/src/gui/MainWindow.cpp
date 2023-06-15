@@ -2,7 +2,10 @@
 
 #include "EnterMenu.h"
 #include "SettingsWidget.h"
+
+// @todo typer, typing.. naming is pain
 #include "TyperWidget.h"
+#include "TypingFinishWidget.h"
 
 #include "../common/Network.h"
 #include "../common/settings/TyperSettings.h"
@@ -35,15 +38,13 @@ void typer::gui::MainWindow::showEnterWidget()
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
 }
 
-void typer::gui::MainWindow::showTyperWidget(const QString &wordType, int sTime)
+void typer::gui::MainWindow::showTyperWidget(const QString &wordType, int timeS)
 {
-    TyperWidget * typerWidget = new TyperWidget(wordType, sTime, this);
+    m_prevTypeSettings = MainWindow::TypeSettings { wordType, timeS };
+    TyperWidget * typerWidget = new TyperWidget(wordType, timeS, this);
     setCentralWidget( typerWidget );
     connect( typerWidget, &TyperWidget::exit, this, &MainWindow::showEnterWidget);
-    connect( typerWidget, &TyperWidget::finish, this, [this](int speed) {
-       qDebug() << "finish with result " << speed;
-       showEnterWidget();
-    });
+    connect( typerWidget, &TyperWidget::finish, this, &MainWindow::showResultWidget);
 }
 
 void typer::gui::MainWindow::showSettingsWidget()
@@ -51,6 +52,16 @@ void typer::gui::MainWindow::showSettingsWidget()
     SettingsWidget * settingsWidget = new SettingsWidget(this);
     setCentralWidget( settingsWidget );
     connect( settingsWidget, &SettingsWidget::exit, this, &MainWindow::showEnterWidget);
+}
+
+void typer::gui::MainWindow::showResultWidget(int result)
+{
+    TypingFinishWidget * finishWidget = new TypingFinishWidget(result);
+    setCentralWidget(finishWidget);
+    connect(finishWidget, &TypingFinishWidget::exit, this, &MainWindow::showEnterWidget);
+    connect(finishWidget, &TypingFinishWidget::repeat, this, [this](){
+        showTyperWidget(m_prevTypeSettings.wordType, m_prevTypeSettings.timeS);
+    });
 }
 
 void typer::gui::MainWindow::updateWordTypes()

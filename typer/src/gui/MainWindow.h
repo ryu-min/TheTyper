@@ -12,14 +12,24 @@ namespace typer
         class MainWindow : public QMainWindow
         {
             Q_OBJECT
+
         public:
             MainWindow(QWidget *parent = nullptr);
             ~MainWindow();
 
+            /// @todo move to somewhere
+            struct TypeSettings
+            {
+                QString wordType;
+                int timeS;
+            };
+
         private slots:
             void showEnterWidget();
-            void showTyperWidget(const QString & wordType, int sTime);
+            void showTyperWidget(const QString & wordType, int timeS);
             void showSettingsWidget();
+            void showResultWidget(int result);
+
             void updateWordTypes();
 
         private:
@@ -29,6 +39,7 @@ namespace typer
 
         private:
             QStringList m_wordTypes;
+            TypeSettings m_prevTypeSettings;
         };
     }
 }
