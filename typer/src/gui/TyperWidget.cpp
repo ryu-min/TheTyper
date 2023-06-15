@@ -18,11 +18,11 @@
 #include <QJsonObject>
 #include <QJsonValue>
 
-typer::gui::TyperWidget::TyperWidget(const QString &wordType,
+typer::gui::TyperWidget::TyperWidget(const QString &wordType, int sTime,
                                      QWidget *parent)
     : QWidget( parent )
 {
-    buildForm(wordType);
+    buildForm(wordType, sTime);
 }
 
 void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
@@ -49,7 +49,7 @@ void typer::gui::TyperWidget::speedCalculated(int speed)
     repaint();
 }
 
-void typer::gui::TyperWidget::buildForm(const QString &wordType)
+void typer::gui::TyperWidget::buildForm(const QString &wordType, int sTime)
 {
     QLabel * exitLabel = new QLabel(this);
 
@@ -99,11 +99,12 @@ void typer::gui::TyperWidget::buildForm(const QString &wordType)
 
     QStringList wordsToType = textToType.split(' ');
     std::random_shuffle(wordsToType.begin(), wordsToType.end());
-    m_textRenderer = new TextEditRenderer(wordsToType, textEdit, this);
+    m_textRenderer = new TextEditRenderer(wordsToType, textEdit, sTime, this);
     m_textRenderer->setIncorrectWordColor(Qt::red);
     m_textRenderer->setCorrectWordColor(Qt::darkCyan);
     connect(m_textRenderer, &TextEditRenderer::speedCaclulated,
             this, &TyperWidget::speedCalculated);
+    connect(m_textRenderer, &TextEditRenderer::finish, this, &TyperWidget::finish);
 
     labelLayout->addWidget( textEdit );
 

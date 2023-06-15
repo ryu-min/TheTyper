@@ -18,7 +18,7 @@ namespace typer
 
         private slots:
             void showEnterWidget();
-            void showTyperWidget(const QString & wordType);
+            void showTyperWidget(const QString & wordType, int sTime);
             void showSettingsWidget();
             void updateWordTypes();
 

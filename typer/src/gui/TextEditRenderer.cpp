@@ -6,13 +6,15 @@
 
 typer::gui::TextEditRenderer::TextEditRenderer(const QString &textToType,
                                                QTextEdit *textEdit,
+                                               int sTime,
                                                QObject *parent)
     : typer::gui::TextEditRenderer(textToType.split(' '),
-                                   textEdit, parent)
+                                   textEdit, sTime, parent)
 {}
 
 typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
                                                QTextEdit *textEdit,
+                                               int sTime,
                                                QObject *parent)
     : QObject(parent)
     , m_textEdit( textEdit )
@@ -27,10 +29,17 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     , m_typedText()
 {
     Q_ASSERT(m_textEdit);
+    m_sFihishTime = sTime;
     splitLines(wordsToType);
     setInitText();
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
-    connect(&m_calcSpeedTimer, &QTimer::timeout, this, &typer::gui::TextEditRenderer::caclSpeed);
+
+    connect(&m_calcSpeedTimer, &QTimer::timeout, this, [this]() {
+        emit speedCaclulated( calcSpeed() );
+    });
+    connect(&m_finishTimer, &QTimer::timeout, this, [this]() {
+       emit finish( calcSpeed() );
+    });
 }
 
 void typer::gui::TextEditRenderer::textChanged()
@@ -40,7 +49,9 @@ void typer::gui::TextEditRenderer::textChanged()
     {
         m_calcSpeedTimer.start(1500);
         m_typeTimer.start();
+        m_finishTimer.start( m_sFihishTime * 1000 );
     }
+
     if ( isRendering() ) return;
     RendererGuard rg(this); Q_UNUSED(rg);
 
@@ -185,30 +196,6 @@ void typer::gui::TextEditRenderer::textChanged()
     }
 }
 
-void typer::gui::TextEditRenderer::caclSpeed()
-{
-    double msElapsed = m_typeTimer.elapsed();
-    qsizetype wordCount = std::min( m_typedTextToCalcSpeed.size(),
-                                    m_correctTextToCalcSpeed.size());
-    quint64 charTyped = 0;
-    for ( int i = 0; i < wordCount; ++i )
-    {
-        QString typed = m_typedTextToCalcSpeed[i];
-        QString correct = m_correctTextToCalcSpeed[i];
-        int size =  std::min( typed.size(), correct.size() );
-        int typedInWord = 0;
-        for ( int j = 0; j < size; ++j )
-        {
-            typedInWord += ( typed[j] == correct[j] ) ? 1 : -1;
-        }
-        /// add space
-        typedInWord = ( typedInWord > 0 ) ? typedInWord + 1 : 0;
-        charTyped += typedInWord;
-    }
-    ///  to the upper bound
-    int speed = int( ( charTyped  / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
-    emit speedCaclulated( speed );
-}
 void typer::gui::TextEditRenderer::startRendering()
 {
     m_isRendering = true;
@@ -258,4 +245,29 @@ void typer::gui::TextEditRenderer::setInitText()
     m_textEdit->setTextColor(m_notTypedWord);
     m_textEdit->insertPlainText(initText);
     stopRendering();
+}
+
+int typer::gui::TextEditRenderer::calcSpeed()
+{
+    double msElapsed = m_typeTimer.elapsed();
+    qsizetype wordCount = std::min( m_typedTextToCalcSpeed.size(),
+                                    m_correctTextToCalcSpeed.size());
+    quint64 charTyped = 0;
+    for ( int i = 0; i < wordCount; ++i )
+    {
+        QString typed = m_typedTextToCalcSpeed[i];
+        QString correct = m_correctTextToCalcSpeed[i];
+        int size =  std::min( typed.size(), correct.size() );
+        int typedInWord = 0;
+        for ( int j = 0; j < size; ++j )
+        {
+            typedInWord += ( typed[j] == correct[j] ) ? 1 : 0;
+        }
+        /// add space
+        typedInWord = ( typedInWord > 0 ) ? typedInWord + 1 : 0;
+        charTyped += typedInWord;
+    }
+    ///  to the upper bound
+    int speed = int( ( charTyped  / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
+    return speed;
 }

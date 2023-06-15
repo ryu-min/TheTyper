@@ -15,7 +15,7 @@ namespace typer
                        QWidget * parent = nullptr);
 
         signals:
-            void start(const QString & wordType);
+            void start(const QString & wordType, int sTime);
             void settings();
 
         protected:

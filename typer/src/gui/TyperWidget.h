@@ -38,10 +38,12 @@ namespace typer
             Q_OBJECT
         public:
             TyperWidget( const QString & wordType,
+                         int sTime,
                          QWidget * parent = nullptr);
 
         signals:
             void exit();
+            void finish(int speed);
 
         protected:
             void resizeEvent(QResizeEvent *event) override;
@@ -51,7 +53,7 @@ namespace typer
             void speedCalculated(int speed);
 
         private:
-            void buildForm(const QString & wordType);
+            void buildForm(const QString & wordType, int sTime);
 
         private:
             TextEditRenderer * m_textRenderer;

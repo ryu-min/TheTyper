@@ -35,11 +35,15 @@ void typer::gui::MainWindow::showEnterWidget()
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
 }
 
-void typer::gui::MainWindow::showTyperWidget(const QString &wordType)
+void typer::gui::MainWindow::showTyperWidget(const QString &wordType, int sTime)
 {
-    TyperWidget * typerWidget = new TyperWidget(wordType, this);
+    TyperWidget * typerWidget = new TyperWidget(wordType, sTime, this);
     setCentralWidget( typerWidget );
     connect( typerWidget, &TyperWidget::exit, this, &MainWindow::showEnterWidget);
+    connect( typerWidget, &TyperWidget::finish, this, [this](int speed) {
+       qDebug() << "finish with result " << speed;
+       showEnterWidget();
+    });
 }
 
 void typer::gui::MainWindow::showSettingsWidget()

@@ -44,7 +44,10 @@ void typer::gui::EnterMenu::showEvent(QShowEvent *event)
 
 void typer::gui::EnterMenu::emitStart()
 {
-     emit start(m_wordTypeComboBox->currentText());
+    QStringList splitedTime = m_timeComboBox->currentText().split(' ');
+    Q_ASSERT(splitedTime.size());
+    int time = splitedTime.size() ? splitedTime[0].toInt() : 60;
+    emit start(m_wordTypeComboBox->currentText(), time );
 }
 
 void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
@@ -91,10 +94,10 @@ void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
     m_timeComboBox->setPalette(startButtonPallete);
     //m_timeComboBox->move(0, 0);
     const QStringList times = QStringList()
-                              << "15s"
-                              << "30s"
-                              << "60s"
-                              << "120s";
+                              << "15 s"
+                              << "30 s"
+                              << "60 s"
+                              << "120 s";
     m_timeComboBox->addItems(times);
 
     m_timeComboBox->setStyleSheet("QComboBox { background-color: transparent; color: gray;}");

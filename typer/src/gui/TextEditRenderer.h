@@ -14,12 +14,14 @@ namespace typer
             Q_OBJECT
         public:
             TextEditRenderer(const QString & textToType,
-                                 QTextEdit * textEdit,
-                                 QObject * parent);
+                             QTextEdit * textEdit,
+                             int sTime,
+                             QObject * parent = nullptr);
 
             TextEditRenderer(const QStringList & wordsToType,
-                                 QTextEdit * textEdit,
-                                 QObject * parent);
+                             QTextEdit * textEdit,
+                             int sTime,
+                             QObject * parent = nullptr);
 
             void setCorrectWordColor( const QColor & color) {
                 m_correctWordColor = color;
@@ -35,10 +37,10 @@ namespace typer
 
         signals:
             void speedCaclulated( int speed );
+            void finish( int speed );
 
         protected slots:
             void textChanged();
-            void caclSpeed();
 
         protected:
             void startRendering();
@@ -46,6 +48,7 @@ namespace typer
             bool isRendering();
             void splitLines( const QStringList & words);
             void setInitText();
+            int calcSpeed();
 
         protected:
             QTextEdit * m_textEdit;
@@ -90,6 +93,8 @@ namespace typer
             WordNumber m_typedWordInLine;
             LineText m_typedText;
             QTimer m_calcSpeedTimer;
+            QTimer m_finishTimer;
+            int m_sFihishTime;
             QElapsedTimer m_typeTimer;
             QStringList m_typedTextToCalcSpeed;
             QStringList m_correctTextToCalcSpeed;
