@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/typer.png</file>
+        <file>icons/question-mark-24.png</file>
+        <file>icons/question-mark-48.png</file>
     </qresource>
 </RCC>

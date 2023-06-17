@@ -7,6 +7,8 @@
 #include "TyperWidget.h"
 #include "TypingFinishWidget.h"
 
+#include "TypeResultWidget.h"
+
 #include "../common/Network.h"
 #include "../common/settings/TyperSettings.h"
 
@@ -55,13 +57,20 @@ void typer::gui::MainWindow::showSettingsWidget()
 }
 
 void typer::gui::MainWindow::showResultWidget(int result)
-{
+{/*
     TypingFinishWidget * finishWidget = new TypingFinishWidget(result);
     setCentralWidget(finishWidget);
     connect(finishWidget, &TypingFinishWidget::exit, this, &MainWindow::showEnterWidget);
     connect(finishWidget, &TypingFinishWidget::repeat, this, [this](){
         showTyperWidget(m_prevTypeSettings.wordType, m_prevTypeSettings.timeS);
     });
+    */
+    TypeResultWidget * resultWidget = new TypeResultWidget();
+    connect(resultWidget, &TypeResultWidget::exit, this, &MainWindow::showEnterWidget);
+    connect(resultWidget, &TypeResultWidget::repeat, this, [this]() {
+        showTyperWidget(m_prevTypeSettings.wordType, m_prevTypeSettings.timeS);
+    });
+    setCentralWidget(resultWidget);
 }
 
 void typer::gui::MainWindow::updateWordTypes()

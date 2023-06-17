@@ -14,8 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set (SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set (RESOURCE_DIR "${CMAKE_SOURCE_DIR}/assets")
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network Charts)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network Charts)
 
 
 file (GLOB_RECURSE PROJECT_SOURCES
@@ -29,6 +29,7 @@ file (GLOB_RECURSE PROJECT_SOURCES
             "${SOURCE_DIR}/common/*.cpp"
             "${SOURCE_DIR}/gui/*.h"
             "${SOURCE_DIR}/gui/*.cpp"
+            "${SOURCE_DIR}/gui/*.ui"
             "${SOURCE_DIR}/gui/auth/*.h"
             "${SOURCE_DIR}/gui/auth/*.cpp"
             "${RESOURCE_DIR}/*.qrc")
@@ -45,7 +46,8 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets
-                                              Qt${QT_VERSION_MAJOR}::Network)
+                                              Qt${QT_VERSION_MAJOR}::Network
+                                              Qt${QT_VERSION_MAJOR}::Charts )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
