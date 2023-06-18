@@ -5,7 +5,9 @@
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QChart>
 
-TypeResultWidget::TypeResultWidget(const typer::common::TypeResults &results, QWidget *parent) :
+#include "../common/Constants.h"
+
+typer::gui::TypeResultWidget::TypeResultWidget(const typer::common::TypeResults &results, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TypeResultWidget)
 {
@@ -29,12 +31,12 @@ TypeResultWidget::TypeResultWidget(const typer::common::TypeResults &results, QW
 
 }
 
-TypeResultWidget::~TypeResultWidget()
+typer::gui::TypeResultWidget::~TypeResultWidget()
 {
     delete ui;
 }
 
-void TypeResultWidget::keyPressEvent(QKeyEvent *event)
+void typer::gui::TypeResultWidget::keyPressEvent(QKeyEvent *event)
 {
     if ( event->key() == Qt::Key_Escape )
     {
@@ -47,13 +49,13 @@ void TypeResultWidget::keyPressEvent(QKeyEvent *event)
     QWidget::keyPressEvent(event);
 }
 
-void TypeResultWidget::showEvent(QShowEvent *event)
+void typer::gui::TypeResultWidget::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     setFocus();
 }
 
-void TypeResultWidget::fillWPMChart(const typer::common::TypeResults &results)
+void typer::gui::TypeResultWidget::fillWPMChart(const typer::common::TypeResults &results)
 {
     QChart *chart = new QChart();
     QChartView * view = ui->wmpPlot;
@@ -61,7 +63,8 @@ void TypeResultWidget::fillWPMChart(const typer::common::TypeResults &results)
     QLineSeries *series = new QLineSeries();
     for ( int i = 0; i < results.size(); i++ )
     {
-        series->append(i * 2, results[i].wpmSpeed);
+        series->append(i * typer::common::CALC_SPEED_TIMEOUT_S,
+                       results[i].wpmSpeed);
     }
     series->setColor(Qt::blue);
     series->setPointLabelsVisible(false);
@@ -82,7 +85,7 @@ void TypeResultWidget::fillWPMChart(const typer::common::TypeResults &results)
     chart->legend()->hide();
 }
 
-void TypeResultWidget::fillAccuracyChart(const typer::common::TypeResults &results)
+void typer::gui::TypeResultWidget::fillAccuracyChart(const typer::common::TypeResults &results)
 {
     QChart *chart = new QChart();
     QChartView * view = ui->accuracyPlot;
@@ -90,7 +93,8 @@ void TypeResultWidget::fillAccuracyChart(const typer::common::TypeResults &resul
     QLineSeries *series = new QLineSeries();    
     for ( int i = 0; i < results.size(); i++ )
     {
-        series->append(i * 2, results[i].accuracy);
+        series->append(i * typer::common::CALC_SPEED_TIMEOUT_S,
+                       results[i].accuracy);
     }
 
     series->setColor(Qt::red);
@@ -112,7 +116,7 @@ void TypeResultWidget::fillAccuracyChart(const typer::common::TypeResults &resul
     chart->legend()->hide();
 }
 
-void TypeResultWidget::setTypeResult(const typer::common::TypeResults &results)
+void typer::gui::TypeResultWidget::setTypeResult(const typer::common::TypeResults &results)
 {
     typer::common::TypeResult result = results.size()
                                        ? results.last()
@@ -125,7 +129,7 @@ void TypeResultWidget::setTypeResult(const typer::common::TypeResults &results)
                              .arg(result.accuracy) );
 }
 
-void TypeResultWidget::configuringQuestionButton()
+void typer::gui::TypeResultWidget::configuringQuestionButton()
 {
     ui->questionButton->setIcon(QIcon("://icons/question-mark-24.png"));
     ui->questionButton->setStyleSheet("QPushButton { border-radius: 1px; }");

@@ -4,6 +4,8 @@
 #include <QApplication>
 #include <QElapsedTimer>
 
+#include "../common/Constants.h"
+
 typer::gui::TextEditRenderer::TextEditRenderer(const QString &textToType,
                                                QTextEdit *textEdit,
                                                int sTime,
@@ -47,7 +49,7 @@ void typer::gui::TextEditRenderer::textChanged()
     //@todo handle tab input (skip)
     if ( !m_calcSpeedTimer.isActive() )
     {
-        m_calcSpeedTimer.start(2000);
+        m_calcSpeedTimer.start(common::CALC_SPEED_TIMEOUT_S * 1000);
         m_typeTimer.start();
         m_finishTimer.start( m_sFihishTime * 1000 );
     }

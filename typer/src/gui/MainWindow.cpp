@@ -5,8 +5,6 @@
 
 // @todo typer, typing.. naming is pain
 #include "TyperWidget.h"
-#include "TypingFinishWidget.h"
-
 #include "TypeResultWidget.h"
 
 #include "../common/Network.h"

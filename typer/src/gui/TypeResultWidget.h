@@ -8,30 +8,37 @@ namespace Ui {
     class TypeResultWidget;
 }
 
-class TypeResultWidget : public QWidget
+
+namespace typer
 {
-    Q_OBJECT
+    namespace gui
+    {
+        class TypeResultWidget : public QWidget
+        {
+            Q_OBJECT
 
-public:
-    explicit TypeResultWidget(const typer::common::TypeResults & results,
-                              QWidget *parent = nullptr);
-    ~TypeResultWidget();
+        public:
+            explicit TypeResultWidget(const typer::common::TypeResults & results,
+                                      QWidget *parent = nullptr);
+            ~TypeResultWidget();
 
-signals:
-    void exit();
-    void repeat();
+        signals:
+            void exit();
+            void repeat();
 
-protected:
-    void keyPressEvent(QKeyEvent *event) override;
-    void showEvent(QShowEvent *event);
+        protected:
+            void keyPressEvent(QKeyEvent *event) override;
+            void showEvent(QShowEvent *event);
 
-private:
-    void fillWPMChart(const typer::common::TypeResults & results);
-    void fillAccuracyChart(const typer::common::TypeResults & results);
-    void setTypeResult(const typer::common::TypeResults &results);
-    void configuringQuestionButton();
+        private:
+            void fillWPMChart(const typer::common::TypeResults & results);
+            void fillAccuracyChart(const typer::common::TypeResults & results);
+            void setTypeResult(const typer::common::TypeResults &results);
+            void configuringQuestionButton();
 
-private:
-    Ui::TypeResultWidget *ui;
-};
+        private:
+            Ui::TypeResultWidget *ui;
+        };
+    }
+}
 
