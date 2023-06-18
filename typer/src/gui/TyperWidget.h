@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TextEditRenderer.h"
+#include "../common/TypeResult.h"
 
 #include <QWidget>
 #include <QTextEdit>
@@ -43,14 +44,14 @@ namespace typer
 
         signals:
             void exit();
-            void finish(int speed);
+            void finish(const common::TypeResults & speed);
 
         protected:
             void resizeEvent(QResizeEvent *event) override;
             void keyPressEvent(QKeyEvent *event);
 
         protected slots:
-            void speedCalculated(int speed);
+            void typeResultCalculated(const common::TypeResult & typeResult);
 
         private:
             void buildForm(const QString & wordType, int sTime);
@@ -58,7 +59,7 @@ namespace typer
         private:
             TextEditRenderer * m_textRenderer;
             QLabel * m_speedLabel;
-
+            common::TypeResults m_typeResults;
         };
     }
 }

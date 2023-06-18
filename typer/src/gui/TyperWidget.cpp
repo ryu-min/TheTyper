@@ -43,9 +43,10 @@ void typer::gui::TyperWidget::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void typer::gui::TyperWidget::speedCalculated(int speed)
+void typer::gui::TyperWidget::typeResultCalculated(const common::TypeResult &typeResult)
 {
-    m_speedLabel->setText(QString("%1 WPM").arg(speed));
+    m_speedLabel->setText(QString("%1 WPM").arg(typeResult.wpmSpeed));
+    m_typeResults.push_back(typeResult);
     repaint();
 }
 
@@ -102,9 +103,13 @@ void typer::gui::TyperWidget::buildForm(const QString &wordType, int sTime)
     m_textRenderer = new TextEditRenderer(wordsToType, textEdit, sTime, this);
     m_textRenderer->setIncorrectWordColor(Qt::red);
     m_textRenderer->setCorrectWordColor(Qt::darkCyan);
-    connect(m_textRenderer, &TextEditRenderer::speedCaclulated,
-            this, &TyperWidget::speedCalculated);
-    connect(m_textRenderer, &TextEditRenderer::finish, this, &TyperWidget::finish);
+    connect(m_textRenderer, &TextEditRenderer:: typeResultCalculated,
+            this, &TyperWidget::typeResultCalculated);
+    connect(m_textRenderer, &TextEditRenderer::finish, this,
+            [this](const common::TypeResult & result ){
+        m_typeResults.push_back(result);
+        emit finish(m_typeResults);
+    });
 
     labelLayout->addWidget( textEdit );
 

@@ -5,11 +5,12 @@
 #include <QtCharts/QValueAxis>
 #include <QtCharts/QChart>
 
-TypeResultWidget::TypeResultWidget(QWidget *parent) :
+TypeResultWidget::TypeResultWidget(const typer::common::TypeResults &results, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TypeResultWidget)
 {
     ui->setupUi(this);
+
     QFont font = ui->resultLabel->font();
     font.setPointSize(18);
     setFont(font);
@@ -18,12 +19,12 @@ TypeResultWidget::TypeResultWidget(QWidget *parent) :
     p.setColor( QPalette::WindowText, Qt::gray );
     setPalette(p);
 
-    ui->resultLabel->setText("Your result is: \n"
-                             "Speed: 80 WPM \n"
-                             "Accuracy: 90%");
-    fillWPMChart();
-    fillAccuracyChart();
+
+    fillWPMChart(results);
+    fillAccuracyChart(results);
     configuringQuestionButton();
+    setTypeResult(results);
+
     setFocusPolicy(Qt::StrongFocus);
 
 }
@@ -52,24 +53,23 @@ void TypeResultWidget::showEvent(QShowEvent *event)
     setFocus();
 }
 
-void TypeResultWidget::fillWPMChart()
+void TypeResultWidget::fillWPMChart(const typer::common::TypeResults &results)
 {
     QChart *chart = new QChart();
     QChartView * view = ui->wmpPlot;
     view->setChart(chart);
     QLineSeries *series = new QLineSeries();
-    series->append(0, 40);
-    series->append(1, 50);
-    series->append(2, 54);
-    series->append(3, 60);
-    series->append(4, 44);
+    for ( int i = 0; i < results.size(); i++ )
+    {
+        series->append(i * 2, results[i].wpmSpeed);
+    }
     series->setColor(Qt::blue);
     series->setPointLabelsVisible(false);
     chart->addSeries(series);
 
 
     QValueAxis *axisX = new QValueAxis();
-    axisX->setLabelFormat("%i");
+    axisX->setLabelFormat("%is");
     chart->addAxis(axisX, Qt::AlignBottom);
     series->attachAxis(axisX);
 
@@ -82,34 +82,47 @@ void TypeResultWidget::fillWPMChart()
     chart->legend()->hide();
 }
 
-void TypeResultWidget::fillAccuracyChart()
+void TypeResultWidget::fillAccuracyChart(const typer::common::TypeResults &results)
 {
     QChart *chart = new QChart();
     QChartView * view = ui->accuracyPlot;
     view->setChart(chart);
-    QLineSeries *series = new QLineSeries();
-    series->append(0, 40);
-    series->append(1, 50);
-    series->append(2, 54);
-    series->append(3, 60);
-    series->append(4, 44);
+    QLineSeries *series = new QLineSeries();    
+    for ( int i = 0; i < results.size(); i++ )
+    {
+        series->append(i * 2, results[i].accuracy);
+    }
+
     series->setColor(Qt::red);
     series->setPointLabelsVisible(false);
     chart->addSeries(series);
 
-
     QValueAxis *axisX = new QValueAxis();
-    axisX->setLabelFormat("%i");
+    axisX->setLabelFormat("%is");
     chart->addAxis(axisX, Qt::AlignBottom);
     series->attachAxis(axisX);
 
     QValueAxis *axisY = new QValueAxis();
     axisY->setLabelFormat("%i");
+    axisY->setRange(0, 100);
     chart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
     view->setRenderHint(QPainter::Antialiasing);
     chart->setTitle("Accuracy");
     chart->legend()->hide();
+}
+
+void TypeResultWidget::setTypeResult(const typer::common::TypeResults &results)
+{
+    typer::common::TypeResult result = results.size()
+                                       ? results.last()
+                                       : typer::common::TypeResult{0, 0};
+
+    ui->resultLabel->setText(QString("Your result is: \n"
+                                     "Speed: %1 WPM \n"
+                                     "Accuracy: %2%")
+                             .arg(result.wpmSpeed)
+                             .arg(result.accuracy) );
 }
 
 void TypeResultWidget::configuringQuestionButton()

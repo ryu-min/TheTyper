@@ -1,7 +1,8 @@
-#ifndef TYPERESULTWIDGET_H
-#define TYPERESULTWIDGET_H
+#pragma once
 
 #include <QWidget>
+
+#include "../common/TypeResult.h"
 
 namespace Ui {
     class TypeResultWidget;
@@ -12,7 +13,8 @@ class TypeResultWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit TypeResultWidget(QWidget *parent = nullptr);
+    explicit TypeResultWidget(const typer::common::TypeResults & results,
+                              QWidget *parent = nullptr);
     ~TypeResultWidget();
 
 signals:
@@ -24,12 +26,12 @@ protected:
     void showEvent(QShowEvent *event);
 
 private:
-    void fillWPMChart();
-    void fillAccuracyChart();
+    void fillWPMChart(const typer::common::TypeResults & results);
+    void fillAccuracyChart(const typer::common::TypeResults & results);
+    void setTypeResult(const typer::common::TypeResults &results);
     void configuringQuestionButton();
 
 private:
     Ui::TypeResultWidget *ui;
 };
 
-#endif // TYPERESULTWIDGET_H

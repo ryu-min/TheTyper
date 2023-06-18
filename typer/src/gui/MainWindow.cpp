@@ -56,16 +56,9 @@ void typer::gui::MainWindow::showSettingsWidget()
     connect( settingsWidget, &SettingsWidget::exit, this, &MainWindow::showEnterWidget);
 }
 
-void typer::gui::MainWindow::showResultWidget(int result)
-{/*
-    TypingFinishWidget * finishWidget = new TypingFinishWidget(result);
-    setCentralWidget(finishWidget);
-    connect(finishWidget, &TypingFinishWidget::exit, this, &MainWindow::showEnterWidget);
-    connect(finishWidget, &TypingFinishWidget::repeat, this, [this](){
-        showTyperWidget(m_prevTypeSettings.wordType, m_prevTypeSettings.timeS);
-    });
-    */
-    TypeResultWidget * resultWidget = new TypeResultWidget();
+void typer::gui::MainWindow::showResultWidget(const common::TypeResults &typeResults)
+{
+    TypeResultWidget * resultWidget = new TypeResultWidget(typeResults);
     connect(resultWidget, &TypeResultWidget::exit, this, &MainWindow::showEnterWidget);
     connect(resultWidget, &TypeResultWidget::repeat, this, [this]() {
         showTyperWidget(m_prevTypeSettings.wordType, m_prevTypeSettings.timeS);

@@ -2,8 +2,8 @@
 
 #include <QMainWindow>
 
-
 #include "EnterMenu.h"
+#include "../common/TypeResult.h"
 
 namespace typer
 {
@@ -28,7 +28,7 @@ namespace typer
             void showEnterWidget();
             void showTyperWidget(const QString & wordType, int timeS);
             void showSettingsWidget();
-            void showResultWidget(int result);
+            void showResultWidget(const common::TypeResults & typeResults);
 
             void updateWordTypes();
 

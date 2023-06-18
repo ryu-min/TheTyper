@@ -5,6 +5,8 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
+#include "../common/TypeResult.h"
+
 namespace typer
 {
     namespace gui
@@ -36,8 +38,8 @@ namespace typer
             }
 
         signals:
-            void speedCaclulated( int speed );
-            void finish( int speed );
+            void typeResultCalculated( const common::TypeResult & result );
+            void finish( const common::TypeResult & result );
 
         protected slots:
             void textChanged();
@@ -48,7 +50,7 @@ namespace typer
             bool isRendering();
             void splitLines( const QStringList & words);
             void setInitText();
-            int calcSpeed();
+            common::TypeResult calcTypeResult();
 
         protected:
             QTextEdit * m_textEdit;

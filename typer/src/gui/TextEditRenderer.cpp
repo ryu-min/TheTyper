@@ -35,10 +35,10 @@ typer::gui::TextEditRenderer::TextEditRenderer(const QStringList &wordsToType,
     connect(m_textEdit, &QTextEdit::textChanged, this, &typer::gui::TextEditRenderer::textChanged);
 
     connect(&m_calcSpeedTimer, &QTimer::timeout, this, [this]() {
-        emit speedCaclulated( calcSpeed() );
+        emit  typeResultCalculated( calcTypeResult() );
     });
     connect(&m_finishTimer, &QTimer::timeout, this, [this]() {
-       emit finish( calcSpeed() );
+       emit finish( calcTypeResult() );
     });
 }
 
@@ -47,7 +47,7 @@ void typer::gui::TextEditRenderer::textChanged()
     //@todo handle tab input (skip)
     if ( !m_calcSpeedTimer.isActive() )
     {
-        m_calcSpeedTimer.start(1500);
+        m_calcSpeedTimer.start(2000);
         m_typeTimer.start();
         m_finishTimer.start( m_sFihishTime * 1000 );
     }
@@ -247,27 +247,49 @@ void typer::gui::TextEditRenderer::setInitText()
     stopRendering();
 }
 
-int typer::gui::TextEditRenderer::calcSpeed()
+typer::common::TypeResult typer::gui::TextEditRenderer::calcTypeResult()
 {
     double msElapsed = m_typeTimer.elapsed();
     qsizetype wordCount = std::min( m_typedTextToCalcSpeed.size(),
                                     m_correctTextToCalcSpeed.size());
-    quint64 charTyped = 0;
+    quint64 correctCharTyped = 0;
+    quint64 errors = 0;
+    quint64 allSize = 0;
+
     for ( int i = 0; i < wordCount; ++i )
     {
         QString typed = m_typedTextToCalcSpeed[i];
         QString correct = m_correctTextToCalcSpeed[i];
         int size =  std::min( typed.size(), correct.size() );
-        int typedInWord = 0;
+        int correctTypedInWord = 0;
         for ( int j = 0; j < size; ++j )
         {
-            typedInWord += ( typed[j] == correct[j] ) ? 1 : 0;
+            if ( typed[j] == correct[j] )
+            {
+                correctTypedInWord += 1;
+            }
+            else
+            {
+                errors += 1;
+            }
         }
+        errors += qAbs(  typed.size() - correct.size() );
         /// add space
-        typedInWord = ( typedInWord > 0 ) ? typedInWord + 1 : 0;
-        charTyped += typedInWord;
+        correctTypedInWord = ( correctTypedInWord > 0 ) ? correctTypedInWord + 1 : 0;
+        correctCharTyped += correctTypedInWord;
+        allSize += correct.size();
     }
     ///  to the upper bound
-    int speed = int( ( charTyped  / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
-    return speed;
+    int speed = int( ( correctCharTyped  / msElapsed ) * 1000 * 60 + 0.5) / 5 + 0.5;
+    common::TypeResult result;
+    result.wpmSpeed = speed;
+    if ( allSize == 0 )
+    {
+        result.accuracy = 100;
+    }
+    else
+    {
+        result.accuracy = int ( ( allSize - errors ) / double(allSize) * 100) ;
+    }
+    return result;
 }
