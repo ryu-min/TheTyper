@@ -5,15 +5,18 @@ TyperDesktop is a cross-platform desktop application for practicing typing skill
 
 ### UI
 Currently, the application consists of two windows:
-1. Start window - where the user can select the type of words to practice. Pressing Enter starts the typing test.
+1. Start window - where the user can select the type of words to practice. Press "Ctrl + Enter" starts the typing test.
 
-<img src="https://github.com/The-Typer/.github/raw/main/profile/main_page.png" alt="Image alt" width="500" height="300">
+<img src="https://github.com/The-Typer/.github/raw/main/profile/main_page.png">
 
-2. Typing window - displays the words to be typed and the typing speed. Pressing Esc quit the typing test.
+2. Typing window - displays the words to be typed and the typing speed. Press "Esc" quit the typing test.
 
-<img src="https://github.com/The-Typer/.github/raw/main/profile/typing_page.png" alt="Image alt" width="500" height="300">
+<img src="https://github.com/The-Typer/.github/raw/main/profile/typing_page.png">
+
+3. Type result window - displays information about the test result (WMP and accuracy). Press "Esc" quit the type result window or Press "Ctrl + Space" to repeat test.
+
+<img src="https://github.com/The-Typer/.github/raw/main/profile/result_page.png">
 
 ###  TODO
 - Add more customization options for the application's appearance.
-- Add a timed typing mode with a separate window displaying the test results.
 - Implement local storage for user's typing statistics.
