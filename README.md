@@ -8,6 +8,8 @@ The goal of the project is to provide users with a tool to improve their typing 
 
 The project is open-source and contributions are welcome from the community
 
+![Alt Text](./images/demo.gif)
+
 ### How to
 To use TheTyper, both TyperDesktop and TyperWord must be running locally. TyperDesktop connects to TyperWord to retrieve typing exercises and submit results.
 
