@@ -1,11 +1,10 @@
 package main
 
 import (
-	_ "embed"
+	"os"
 	"words_backend/internal/handler"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -14,5 +13,10 @@ func main() {
 	r.GET("/ping", h.Ping)
 	r.GET("/words/:type", h.Words)
 	r.GET("/supported", h.SupportedTypes)
-	r.Run("localhost:5050")
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	r.Run(":" + port)
 }
