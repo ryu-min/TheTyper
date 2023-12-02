@@ -15,7 +15,7 @@ namespace
 
 QString getWordServiceUrlString()
 {
-    return "http://127.0.0.1:5050";
+    return "http://31.129.109.221:8080";
 }
 
 
@@ -136,6 +136,9 @@ bool typer::common::checkToken(JwtToken token)
 
 typer::common::WordsRequestResult typer::common::requestWords(const WordsType &wordsType)
 {
+    WaitCoursor wc;
+    Q_UNUSED(wc);
+
     QString stringUrl = getWordServiceUrlString()  + "/words/" + wordsType;
     QNetworkRequest textRequest( stringUrl);
     QString wordsRequestResult;
