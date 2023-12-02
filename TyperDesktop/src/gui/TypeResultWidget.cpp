@@ -21,14 +21,12 @@ typer::gui::TypeResultWidget::TypeResultWidget(const typer::common::TypeResults 
     p.setColor( QPalette::WindowText, Qt::gray );
     setPalette(p);
 
-
     fillWPMChart(results);
     fillAccuracyChart(results);
     configuringQuestionButton();
     setTypeResult(results);
 
     setFocusPolicy(Qt::StrongFocus);
-
 }
 
 typer::gui::TypeResultWidget::~TypeResultWidget()
@@ -42,7 +40,7 @@ void typer::gui::TypeResultWidget::keyPressEvent(QKeyEvent *event)
     {
         emit exit();
     }
-    else if ( event->key() == Qt::Key_Space && (event->modifiers() & Qt::ControlModifier) )
+    else if ( event->key() == Qt::Key_Space)
     {
         emit repeat();
     }

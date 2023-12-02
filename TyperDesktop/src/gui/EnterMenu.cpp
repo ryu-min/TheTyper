@@ -19,12 +19,8 @@ typer::gui::EnterMenu::EnterMenu(const QStringList & wordTypes,
 void typer::gui::EnterMenu::keyReleaseEvent(QKeyEvent *event)
 {
     QWidget::keyReleaseEvent(event);
-    bool enterPressed = (    (event->key() == Qt::Key_Enter)
-                          || (event->key() == Qt::Key_Return) );
-    bool ctrlPressed = ( event->modifiers() & Qt::ControlModifier );
-
-    if ( enterPressed && ctrlPressed )
-    {
+    bool spacePressed = (event->key() == Qt::Key_Space);
+    if ( spacePressed ) {
         emitStart();
     }
 }
@@ -56,7 +52,7 @@ void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
     const int BUTTON_WIDTH = 300;
     const int BUTTON_HEIGHT = 50;
 
-    QPushButton * startButton = new QPushButton("Ctrl + Enter to start", this);
+    QPushButton * startButton = new QPushButton("press space to start", this);
     startButton->setStyleSheet("QPushButton {background-color: rgba(255, 255, 255, 0); color: gray;}");
 
     startButton->setFixedWidth( BUTTON_WIDTH );

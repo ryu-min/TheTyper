@@ -31,8 +31,8 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Ctrl + Space - repeat test 
-Esc - quit</string>
+        <string>Space - repeat test 
+ESC - quit</string>
        </property>
        <property name="text">
         <string/>
