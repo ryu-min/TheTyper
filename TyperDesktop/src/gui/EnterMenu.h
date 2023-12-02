@@ -14,6 +14,8 @@ namespace typer
             EnterMenu( const QStringList & wordTypes,
                        QWidget * parent = nullptr);
 
+            void setCurentSettings(const QString & wordType, int time);
+
         signals:
             void start(const QString & wordType, int sTime);
             void settings();
@@ -29,6 +31,8 @@ namespace typer
         private:
             void buildForm(const QStringList & wordTypes);
             void updateComboBoxesPos();
+            QString timeToStr(int time);
+            int strToTime(const QString & timeStr);
 
         private:
             QComboBox * m_wordTypeComboBox;

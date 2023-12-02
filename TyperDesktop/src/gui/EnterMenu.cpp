@@ -16,6 +16,13 @@ typer::gui::EnterMenu::EnterMenu(const QStringList & wordTypes,
     setFocusPolicy(Qt::StrongFocus);
 }
 
+void typer::gui::EnterMenu::setCurentSettings(const QString &wordType, int time)
+{
+    m_wordTypeComboBox->setCurrentText(wordType);
+    QString timeString = QString::number(time) + " s";
+    m_timeComboBox->setCurrentText(timeString);
+}
+
 void typer::gui::EnterMenu::keyReleaseEvent(QKeyEvent *event)
 {
     QWidget::keyReleaseEvent(event);
@@ -40,10 +47,8 @@ void typer::gui::EnterMenu::showEvent(QShowEvent *event)
 
 void typer::gui::EnterMenu::emitStart()
 {
-    QStringList splitedTime = m_timeComboBox->currentText().split(' ');
-    Q_ASSERT(splitedTime.size());
-    int time = splitedTime.size() ? splitedTime[0].toInt() : 60;
-    emit start(m_wordTypeComboBox->currentText(), time );
+    emit start(m_wordTypeComboBox->currentText(),
+               strToTime(m_timeComboBox->currentText()));
 }
 
 void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
@@ -90,10 +95,10 @@ void typer::gui::EnterMenu::buildForm(const QStringList &wordTypes)
     m_timeComboBox->setPalette(startButtonPallete);
     //m_timeComboBox->move(0, 0);
     const QStringList times = QStringList()
-                              << "15 s"
-                              << "30 s"
-                              << "60 s"
-                              << "120 s";
+                              << timeToStr(15)
+                              << timeToStr(30)
+                              << timeToStr(60)
+                              << timeToStr(120);
     m_timeComboBox->addItems(times);
 
     m_timeComboBox->setStyleSheet("QComboBox { background-color: transparent; color: gray;}");
@@ -126,4 +131,16 @@ void typer::gui::EnterMenu::updateComboBoxesPos()
     int cbWidth     = m_timeComboBox->sizeHint().width();
     m_timeComboBox->move(widgetWidth - cbWidth - 10, 10);
     m_wordTypeComboBox->move(QPoint(10, 10));
+}
+
+QString typer::gui::EnterMenu::timeToStr(int time)
+{
+    return QString::number(time) + " s";
+}
+
+int typer::gui::EnterMenu::strToTime(const QString &timeStr)
+{
+    QStringList splitedTime = timeStr.split(' ');
+    Q_ASSERT(splitedTime.size());
+    return splitedTime[0].toInt();
 }

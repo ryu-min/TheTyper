@@ -33,6 +33,10 @@ void typer::gui::MainWindow::showEnterWidget()
 {
     if ( m_wordTypes.isEmpty() ) updateWordTypes();
     EnterMenu * enterMenu = new EnterMenu(m_wordTypes, this);
+    if (!m_prevTypeSettings.wordType.isEmpty()) {
+        enterMenu->setCurentSettings(m_prevTypeSettings.wordType,
+                                     m_prevTypeSettings.timeS);
+    }
     setCentralWidget( enterMenu );
     connect( enterMenu, &EnterMenu::start, this, &MainWindow::showTyperWidget );
     connect( enterMenu, &EnterMenu::settings, this, &MainWindow::showSettingsWidget );
