@@ -19,8 +19,7 @@ typer::gui::EnterMenu::EnterMenu(const QStringList & wordTypes,
 void typer::gui::EnterMenu::setCurentSettings(const QString &wordType, int time)
 {
     m_wordTypeComboBox->setCurrentText(wordType);
-    QString timeString = QString::number(time) + " s";
-    m_timeComboBox->setCurrentText(timeString);
+    m_timeComboBox->setCurrentText(timeToStr(time));
 }
 
 void typer::gui::EnterMenu::keyReleaseEvent(QKeyEvent *event)
