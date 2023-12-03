@@ -5,9 +5,7 @@ typer::common::settings::SettingsFile::SettingsFile(const QString &fileName,
                                                     QObject *parent)
     : QObject(parent)
     , m_settings(baseDir.absolutePath() + QDir::separator() + fileName, QSettings::IniFormat)
-{
-    qDebug() << baseDir.absolutePath() + QDir::separator() + fileName;
-}
+{}
 
 void typer::common::settings::SettingsFile::setValue(const QString &valueKey, const QVariant &value)
 {
