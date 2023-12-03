@@ -30,8 +30,6 @@ file (GLOB_RECURSE PROJECT_SOURCES
             "${SOURCE_DIR}/gui/*.h"
             "${SOURCE_DIR}/gui/*.cpp"
             "${SOURCE_DIR}/gui/*.ui"
-            "${SOURCE_DIR}/gui/auth/*.h"
-            "${SOURCE_DIR}/gui/auth/*.cpp"
             "${RESOURCE_DIR}/*.qrc")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
