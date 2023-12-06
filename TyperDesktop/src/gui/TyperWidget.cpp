@@ -31,7 +31,7 @@ void typer::gui::TyperWidget::resizeEvent(QResizeEvent *event)
     QSizeF wSize = size();
     QSizeF sSize = m_speedLabel->size();
     m_speedLabel->move( wSize.width() / 2 - sSize.width() / 2,
-                        wSize.height()/2 - 80);
+                        wSize.height()/2 - 100);
 }
 
 void typer::gui::TyperWidget::keyPressEvent(QKeyEvent *event)
